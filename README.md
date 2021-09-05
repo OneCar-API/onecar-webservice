@@ -28,9 +28,9 @@ apt-get install -y nodejs
 
 - Acesse o site do [NodeJS](https://nodejs.org/en/) e baixe a versão LTS:
 
-### Instalação do Docker 
+### Instalação do Docker
 
-- Para instalar o Docker Engine, acesse o site do [Docker](https://docs.docker.com/engine/install) e escolha a distribuição da sua preferência. 
+- Para instalar o Docker Engine, acesse o site do [Docker](https://docs.docker.com/engine/install) e escolha a distribuição da sua preferência.
 - Siga todos os passos listados.
 - Por fim, para que não precise utilizar o sudo, execute os comandos presentes [nessa página](https://docs.docker.com/engine/install/linux-postinstall).
 
@@ -45,7 +45,7 @@ apt-get install -y nodejs
 docker run --name postgres -e POSTGRES_PASSWORD=your-password -e POSTGRES_DB=onecar -p 5432:5432 -d postgres
 ```
 
-- Seu container foi criado com o USER padrão postgres, caso deseje atribuir um nome ao seu usuário, você pode adicionar o atributo 
+- Seu container foi criado com o USER padrão postgres, caso deseje atribuir um nome ao seu usuário, você pode adicionar o atributo
 ```-e POSTGRES_USER=my-user```
 
 - Neste momento seu container deve estar executando. Para confirmar execute:
@@ -83,7 +83,7 @@ $ cp .env.example .env
 **.env**
 ```env
 # Application
-APP_SECRET=onecar
+APP_SECRET=onecar-webservice
 
 APP_WEB_URL=http://localhost:3000
 APP_API_URL=http://localhost:3333
