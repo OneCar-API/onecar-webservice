@@ -4,8 +4,6 @@ import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
 
-import '@config/authHere';
-
 import '@shared/infra/typeorm';
 import routes from './routes';
 

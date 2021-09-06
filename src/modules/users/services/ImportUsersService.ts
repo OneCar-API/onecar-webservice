@@ -3,6 +3,7 @@
 import csvParse from 'csv-parse';
 import fs from 'fs';
 import * as Yup from 'yup';
+import cep from 'cep-promise';
 
 import { inject, injectable } from 'tsyringe';
 
@@ -10,7 +11,6 @@ import objectIsEmpty from '@shared/defaultFunctions/functionObjectIsEmpty';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
-import IMapProvider from '@shared/container/providers/MapProvider/models/IMapProvider';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 
 export interface IImportAddress {
@@ -50,9 +50,6 @@ class ImportUsersService {
 
     @inject('AddressesRepository')
     private addressesRepository: IAddressesRepository,
-
-    @inject('MapProvider')
-    private mapProvider: IMapProvider,
 
     @inject('HashProvider')
     private hashProvider: IHashProvider,
@@ -110,7 +107,24 @@ class ImportUsersService {
     return zipCodeCSV;
   }
 
+  async formatAddress({
+    zip_code,
+  }: IImportAddress): Promise<IImportAddress | null> {
+    const paramsAddress = await cep(zip_code).catch(() => null);
 
+    if (!paramsAddress) {
+      return null;
+    }
+
+    const addressFormatted = {
+      neighborhood: paramsAddress.neighborhood,
+      city: paramsAddress.city,
+      state: paramsAddress.state,
+      zip_code: paramsAddress.cep,
+    };
+
+    return addressFormatted;
+  }
 
   usersFailed: IImportUsers[] = [];
 
@@ -232,21 +246,21 @@ class ImportUsersService {
       });
 
       if (address?.zip_code) {
-        const formattedAddress = await this.mapProvider.formatAddress(address);
+        const formattedAddress = await this.formatAddress(address);
 
         if (
           objectIsEmpty(formattedAddress) ||
-          formattedAddress.zip_code === null
+          formattedAddress?.zip_code === null
         ) {
           return;
         }
 
         await this.addressesRepository.create({
           user_id: importUser.id,
-          zip_code: formattedAddress.zip_code,
-          neighborhood: formattedAddress.neighborhood,
-          city: formattedAddress.city,
-          state: formattedAddress.state,
+          zip_code: formattedAddress?.zip_code,
+          neighborhood: formattedAddress?.neighborhood,
+          city: formattedAddress?.city,
+          state: formattedAddress?.state,
         });
       }
     });
