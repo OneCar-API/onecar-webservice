@@ -39,6 +39,8 @@ class User {
   @Column()
   is_juridic: boolean;
 
+  confirm_import: boolean;
+
   @CreateDateColumn()
   created_at: Date;
 
