@@ -27,7 +27,7 @@ interface IImportUsers {
   phone?: string;
   document?: string;
   cnpj?: string;
-  is_juridic?: boolean;
+  is_legal?: boolean;
   address?: IImportAddress;
 }
 
@@ -38,7 +38,7 @@ interface IFormatDate {
   phone?: string;
   document?: string;
   cnpj?: string;
-  is_juridic?: boolean;
+  is_legal?: boolean;
   address?: IImportAddress;
 }
 

@@ -51,7 +51,7 @@ class FakeUsersRepository implements IUsersRepository {
     phone,
     document,
     cnpj,
-    is_juridic,
+    is_legal,
   }: IUpdateUserDTO): Promise<User | undefined> {
     const findUser = this.users.find(user => user.id === user_id);
 
@@ -63,7 +63,7 @@ class FakeUsersRepository implements IUsersRepository {
       phone,
       document,
       cnpj,
-      is_juridic,
+      is_legal,
     });
 
     this.users.push(updatedUser);
