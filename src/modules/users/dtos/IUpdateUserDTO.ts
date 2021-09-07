@@ -7,5 +7,5 @@ export default interface IUpdateUserDTO {
   phone?: string;
   document?: string;
   cnpj?: string;
-  is_juridic?: boolean;
+  is_legal?: boolean;
 }

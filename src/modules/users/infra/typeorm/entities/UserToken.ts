@@ -4,42 +4,23 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  Generated,
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
 
-@Entity('users')
-class User {
+@Entity('users_tokens')
+class UserToken {
   @PrimaryGeneratedColumn('uuid')
   @Exclude()
   id: string;
 
   @Column()
-  name: string;
+  @Generated('uuid')
+  token: string;
 
   @Column()
-  nickname: string;
-
-  @Column()
-  email: string;
-
-  @Column()
-  @Exclude()
-  password: string;
-
-  @Column()
-  phone: string;
-
-  @Column()
-  document: string;
-
-  @Column()
-  cnpj: string;
-
-  @Column()
-  is_legal: boolean;
-
-  confirm_import: boolean;
+  user_id: string;
 
   @CreateDateColumn()
   created_at: Date;
@@ -48,4 +29,4 @@ class User {
   updated_at: Date;
 }
 
-export default User;
+export default UserToken;

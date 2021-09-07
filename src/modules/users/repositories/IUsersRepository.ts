@@ -22,7 +22,7 @@ export default interface IUsersRepository {
     phone,
     document,
     cnpj,
-    is_juridic,
+    is_legal,
   }: IUpdateUserDTO): Promise<User | undefined>;
   agreeToSubscribeData(confirm_import: boolean): Promise<boolean>;
   findByDocument(document: string): Promise<User | undefined>;

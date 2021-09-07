@@ -51,7 +51,7 @@ class UsersRepository implements IUsersRepository {
     password,
     document,
     cnpj,
-    is_juridic,
+    is_legal,
   }: IUpdateUserDTO): Promise<User | undefined> {
     const user = await this.ormRepository.findOne({
       where: { user_id },
@@ -65,7 +65,7 @@ class UsersRepository implements IUsersRepository {
       password,
       document,
       cnpj,
-      is_juridic,
+      is_legal,
     });
 
     await this.ormRepository.save(updateUser);
