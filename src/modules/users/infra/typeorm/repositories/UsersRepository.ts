@@ -20,6 +20,7 @@ class UsersRepository implements IUsersRepository {
     phone,
     document,
     cnpj,
+    is_legal,
   }: IImportUserDTO): Promise<User> {
     const user = this.ormRepository.create({
       name,
@@ -29,6 +30,7 @@ class UsersRepository implements IUsersRepository {
       phone,
       document,
       cnpj,
+      is_legal,
     });
 
     await this.ormRepository.save(user);

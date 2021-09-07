@@ -11,6 +11,7 @@ export default interface IUsersRepository {
     phone,
     document,
     cnpj,
+    is_legal,
   }: IImportUserDTO): Promise<User>;
   generateRandomPassword(): Promise<string>;
   update({
