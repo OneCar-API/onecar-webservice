@@ -6,4 +6,5 @@ export default interface IImportUserDTO {
   phone?: string;
   document?: string;
   cnpj?: string;
+  is_legal?: boolean;
 }

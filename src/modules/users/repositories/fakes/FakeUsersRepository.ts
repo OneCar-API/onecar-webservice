@@ -17,6 +17,7 @@ class FakeUsersRepository implements IUsersRepository {
     phone,
     document,
     cnpj,
+    is_legal,
   }: IImportUserDTO): Promise<User> {
     const user = new User();
 
@@ -29,6 +30,7 @@ class FakeUsersRepository implements IUsersRepository {
       phone,
       document,
       cnpj,
+      is_legal,
     });
 
     this.users.push(user);

@@ -1,8 +1,10 @@
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
-import csvParse from 'csv-parse';
 import fs from 'fs';
+import path from 'path';
+
 import * as Yup from 'yup';
+import csvParse from 'csv-parse';
 import cep from 'cep-promise';
 
 import { inject, injectable } from 'tsyringe';
@@ -12,6 +14,8 @@ import objectIsEmpty from '@shared/defaultFunctions/functionObjectIsEmpty';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
 import IHashProvider from '../providers/HashProvider/models/IHashProvider';
+import IUsersTokensRepository from '../repositories/IUsersTokensRepository';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 
 export interface IImportAddress {
   zip_code?: string;
@@ -51,8 +55,14 @@ class ImportUsersService {
     @inject('AddressesRepository')
     private addressesRepository: IAddressesRepository,
 
+    @inject('UsersTokensRepository')
+    private usersTokensRepository: IUsersTokensRepository,
+
     @inject('HashProvider')
     private hashProvider: IHashProvider,
+
+    @inject('MailProvider')
+    private mailProvider: IMailProvider,
   ) {}
 
   async formatPhone(phone: string | undefined): Promise<string | undefined> {
@@ -228,11 +238,11 @@ class ImportUsersService {
     users.map(async user => {
       const { name, nickname, email, phone, document, cnpj, address } = user;
 
-      const randomPassword =
+      const generateRandomPassword =
         await this.usersRepository.generateRandomPassword();
 
       const hashedPassword = await this.hashProvider.generateHash(
-        randomPassword,
+        generateRandomPassword,
       );
 
       const importUser = await this.usersRepository.import({
@@ -243,6 +253,7 @@ class ImportUsersService {
         ...(document && { document }),
         ...(cnpj && { cnpj }),
         ...(phone && { phone }),
+        is_legal: cnpj && cnpj ? true : false,
       });
 
       if (address?.zip_code) {
@@ -263,6 +274,32 @@ class ImportUsersService {
           state: formattedAddress?.state,
         });
       }
+
+      const { token } = await this.usersTokensRepository.generate(importUser.id);
+
+      const inviteUser = path.resolve(
+        __dirname,
+        '..',
+        'views',
+        'invite_user.hbs',
+      );
+
+      await this.mailProvider.sendMail({
+        to: {
+          name: importUser.name,
+          email: importUser.email,
+        },
+        subject: '[OneCar] Convite ao Usuário',
+        templateData: {
+          file: inviteUser,
+          variables: {
+            name: importUser.name,
+            email: importUser.email,
+            password: generateRandomPassword,
+            link: `${process.env.APP_WEB_URL}/invite-user/${token}`,
+          },
+        },
+      });
     });
 
     return this.usersFailed;
