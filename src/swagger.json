@@ -1,0 +1,257 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OneCar Documentation",
+    "description": "Olá, essa é a documentação da API do OneCar. \n\n A API segue o padrão REST e todas suas respostas são em JSON. \n\n Quanto à autenticação, os serviços utilizam o seguinte método de validação: \n\n - Autenticação com token para a segurança. O usuário e senha devem ser de um usuário ativo na plataforma. \n\n Essa API usa como retorno os códigos HTTP padrões para indicar tanto o sucesso de uma requisição, quanto para indicar falha. Segue abaixo os principais: \n\n 1. 200 - Success \n\n 2. 401 - JWT token is missing / Invalid JWT token. Podem ainda ocorrer outros erros de validação ligados às regras de negócio e nestes casos serão tratados com o retorno do código de erro equivalente e uma mensagem explicativa (os respectivos códigos e mensagens estão listados no retorno de cada endpoint)",
+    "version": "1.0.0",
+    "contact": {
+      "email": "contato@onecar.com.br"
+    }
+  },
+  "paths": {
+    "/users/import": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Importar usuários",
+        "description": "Essa rota permite a importação de um arquivo CSV contendo as informações dos usuários",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file-users": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your file has been imported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "usersFailed": [
+                        {
+                          "name": {
+                            "type": "string"
+                          },
+                          "nickname": {
+                            "type": "string"
+                          },
+                          "document": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "address": {
+                            "zip_code": {
+                              "type": "string"
+                            },
+                            "neighborhood": {
+                              "type": "string"
+                            },
+                            "city": {
+                              "type": "string"
+                            },
+                            "state": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/password/reset": {
+      "post": {
+        "tags": ["Reset Password"],
+        "summary": "Reset da senha através do link de recuperação de senha",
+        "description": "Apenas usuários vindos através deste link que terão acesso à página para resetar senha.",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirmation": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "token": "5a3df27f-833b-4fb6-8601-74564ceb9cc7",
+                  "password": "567890",
+                  "password_confirmation": "567890"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your password was changed successfully"
+          },
+          "401": {
+            "description": "Token expired"
+          },
+          "404": {
+            "description": "User does not exists / User token does not exists"
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "users": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "nickname",
+        "password",
+        "email",
+        "document",
+        "is_legal"
+      ],
+      "properties": {
+        "id": {
+          "type": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "cnpj": {
+          "type": "string"
+        },
+        "is_legal": {
+          "type": "boolean",
+          "default": false
+        },
+        "created_at": {
+          "type": "timestamp with time zone"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone"
+        }
+      }
+    },
+
+    "user_tokens": {
+      "type": "object",
+      "required": [
+        "id",
+        "user_id",
+        "token"
+      ],
+      "properties": {
+        "id": {
+          "type": "uuid"
+        },
+        "user_id": {
+          "type": "uuid (FK)"
+        },
+        "token": {
+          "type": "uuid"
+        },
+        "created_at": {
+          "type": "timestamp with time zone"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone"
+        }
+      }
+    },
+
+    "addresses": {
+      "type": "object",
+      "required": [
+        "id",
+        "zip_code",
+        "user_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "uuid"
+        },
+        "zip_code": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "uuid (FK)"
+        },
+        "created_at": {
+          "type": "timestamp with time zone"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone"
+        }
+      }
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

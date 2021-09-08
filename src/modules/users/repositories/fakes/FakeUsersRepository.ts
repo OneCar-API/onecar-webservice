@@ -5,6 +5,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IImportUserDTO from '@modules/users/dtos/IImportUserDTO';
 import IUpdateUserDTO from '@modules/users/dtos/IUpdateUserDTO';
 import User from '../../infra/typeorm/entities/User';
+import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
 class FakeUsersRepository implements IUsersRepository {
   private users: User[] = [];
@@ -19,6 +20,35 @@ class FakeUsersRepository implements IUsersRepository {
     cnpj,
     is_legal,
   }: IImportUserDTO): Promise<User> {
+    const user = new User();
+
+    Object.assign(user, {
+      id: uuidV4(),
+      name,
+      nickname,
+      email,
+      password,
+      phone,
+      document,
+      cnpj,
+      is_legal,
+    });
+
+    this.users.push(user);
+
+    return user;
+  }
+
+  public async create({
+    name,
+    nickname,
+    email,
+    password,
+    phone,
+    document,
+    cnpj,
+    is_legal,
+  }: ICreateUserDTO): Promise<User> {
     const user = new User();
 
     Object.assign(user, {
@@ -71,6 +101,14 @@ class FakeUsersRepository implements IUsersRepository {
     this.users.push(updatedUser);
 
     return updatedUser;
+  }
+
+  public async save(user: User): Promise<User> {
+    const findIndex = this.users.findIndex(findUser => findUser.id === user.id);
+
+    this.users[findIndex] = user;
+
+    return user;
   }
 
   public async agreeToSubscribeData(confirm_import: boolean): Promise<boolean> {

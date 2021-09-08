@@ -9,12 +9,12 @@ export default class UsersController {
 
     const importUsers = container.resolve(ImportUsersService);
 
-    const contributorsFailed = await importUsers.execute(
+    const usersFailed = await importUsers.execute(
       file as Express.Multer.File,
     );
 
     return response
       .status(200)
-      .json({ message: 'Your file has been imported!', contributorsFailed });
+      .json({ message: 'Your file has been imported!', usersFailed });
   }
 }
