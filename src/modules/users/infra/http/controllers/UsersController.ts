@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 import ImportUsersService from '@modules/users/services/ImportUsersService';
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';
+import ShowUserService from '@modules/users/services/ShowUserService';
 
 export default class UsersController {
   public async import(request: Request, response: Response): Promise<Response> {
@@ -28,5 +29,15 @@ export default class UsersController {
     const allUsers = await users.execute();
 
     return response.json(classToClass(allUsers));
+  }
+
+  public async show(request: Request, response: Response): Promise<Response> {
+    const user_id = request.params.id;
+
+    const showUser = container.resolve(ShowUserService);
+
+    const user = await showUser.execute(user_id);
+
+    return response.json(classToClass(user));
   }
 }

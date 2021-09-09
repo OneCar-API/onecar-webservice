@@ -119,6 +119,54 @@
       }
     },
 
+    "/user/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Busca um usuário através do ID",
+        "description": "Essa rota permite buscar apenas um usuário por vez. O ID deve estar contido no parâmetro da URL.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário que deseja buscar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+
     "/password/forgot": {
       "post": {
         "tags": ["Forgot Password"],
