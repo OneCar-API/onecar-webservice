@@ -136,6 +136,10 @@ class FakeUsersRepository implements IUsersRepository {
     return findUser;
   }
 
+  public async findAll(): Promise<User[]> {
+    return this.users;
+  }
+
 }
 
 export default FakeUsersRepository;

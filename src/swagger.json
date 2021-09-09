@@ -85,6 +85,40 @@
       }
     },
 
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Busca todos os usuários da plataforma",
+        "description": "Essa rota permite buscar todos os usuários da plataforma.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "email": {
+                        "type": "string"
+                      },
+                      "password": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          }
+        }
+      }
+    },
+
     "/password/forgot": {
       "post": {
         "tags": ["Forgot Password"],
