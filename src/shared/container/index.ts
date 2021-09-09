@@ -24,3 +24,4 @@ container.registerSingleton<IAddressesRepository>(
   'AddressesRepository',
   AddressesRepository,
 );
+

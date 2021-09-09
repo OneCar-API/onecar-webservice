@@ -40,4 +40,5 @@ export default interface IUsersRepository {
   agreeToSubscribeData(confirm_import: boolean): Promise<boolean>;
   findByDocument(document: string): Promise<User | undefined>;
   findById(id: string): Promise<User | undefined>;
+  findByEmail(email: string): Promise<User | undefined>;
 }
