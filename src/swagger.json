@@ -163,6 +163,46 @@
           }
         }
       }
+    },
+
+    "/sessions": {
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Autenticação do usuário",
+        "description": "Essa rota permite o login do usuário, fornecendo o token de autenticação",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johndoe@example.com",
+                  "password": "123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Incorrect email/password combination"
+          }
+        }
+      }
     }
   },
 
