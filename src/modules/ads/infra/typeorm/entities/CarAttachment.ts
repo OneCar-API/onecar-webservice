@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
-import Car from '@modules/ads/infra/typeorm/entities/Car';
+import Car from './Car';
 
 @Entity('car_attachments')
 class CarAttachment {

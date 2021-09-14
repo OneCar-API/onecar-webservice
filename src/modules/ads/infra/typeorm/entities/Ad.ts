@@ -10,8 +10,8 @@ import {
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
-import User from '@modules/users/infra/typeorm/entities/User';
-import Car from '@modules/ads/infra/typeorm/entities/Car';
+import User from '../../../../users/infra/typeorm/entities/User';
+import Car from './Car';
 
 
 @Entity('ads')
