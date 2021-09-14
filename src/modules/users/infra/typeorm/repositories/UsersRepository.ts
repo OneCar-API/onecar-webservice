@@ -4,6 +4,7 @@ import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IUpdateUserDTO from '@modules/users/dtos/IUpdateUserDTO';
 import IImportUserDTO from '@modules/users/dtos/IImportUserDTO';
 import User from '../entities/User';
+import ICreateUserDTO from '@modules/users/dtos/ICreateUserDTO';
 
 class UsersRepository implements IUsersRepository {
   private ormRepository: Repository<User>;
@@ -22,6 +23,32 @@ class UsersRepository implements IUsersRepository {
     cnpj,
     is_legal,
   }: IImportUserDTO): Promise<User> {
+    const user = this.ormRepository.create({
+      name,
+      nickname,
+      email,
+      password,
+      phone,
+      document,
+      cnpj,
+      is_legal,
+    });
+
+    await this.ormRepository.save(user);
+
+    return user;
+  }
+
+  public async create({
+    name,
+    nickname,
+    email,
+    password,
+    phone,
+    document,
+    cnpj,
+    is_legal,
+  }: ICreateUserDTO): Promise<User> {
     const user = this.ormRepository.create({
       name,
       nickname,
@@ -73,6 +100,10 @@ class UsersRepository implements IUsersRepository {
     await this.ormRepository.save(updateUser);
 
     return updateUser;
+  }
+
+  public async save(user: User): Promise<User> {
+    return this.ormRepository.save(user);
   }
 
   public async agreeToSubscribeData(confirm_import: boolean): Promise<boolean> {
