@@ -85,6 +85,39 @@
       }
     },
 
+    "/password/forgot": {
+      "post": {
+        "tags": ["Forgot Password"],
+        "summary": "Envio de e-mail de recuperação de senha",
+        "description": "O e-mail enviado ao usuário contará com um link de recuperação de senha, que conterá um token para que seja autorizado a recuperar sua senha.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johndoe@example.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sent a email to reset password"
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
+
     "/password/reset": {
       "post": {
         "tags": ["Reset Password"],

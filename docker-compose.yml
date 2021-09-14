@@ -15,8 +15,6 @@ services:
       - pgdata:/data/postgres
 
 
-
-
   app:
     build: .
     container_name: onecar
