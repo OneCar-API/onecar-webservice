@@ -37,7 +37,6 @@ describe('AuthenticateUser', () => {
     });
 
     expect(response).toHaveProperty('token');
-    expect(response).toHaveProperty('contact');
     expect(response.user).toEqual(user);
   });
 
@@ -51,7 +50,7 @@ describe('AuthenticateUser', () => {
   });
 
   it('should not be able to authenticate with wrong password', async () => {
-    const user = await fakeUsersRepository.create({
+    await fakeUsersRepository.create({
       name: 'John Doe',
       nickname: 'john.doe',
       password: '123456',
