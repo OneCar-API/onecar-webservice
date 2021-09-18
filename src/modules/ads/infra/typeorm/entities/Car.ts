@@ -30,6 +30,9 @@ class Car {
   year_manufacture: string;
 
   @Column()
+  year_model: string;
+
+  @Column()
   fuel: string;
 
   @Column()

@@ -21,6 +21,9 @@ class Ad {
   id: string;
 
   @Column()
+  ad_code: string;
+
+  @Column()
   title: string;
 
   @Column()

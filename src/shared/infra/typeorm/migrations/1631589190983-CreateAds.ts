@@ -15,16 +15,28 @@ export class CreateAds1631589190983 implements MigrationInterface {
               default: 'uuid_generate_v4()',
             },
             {
-              name: 'attachment',
-              type: 'varchar',
-            },
-            {
-              name: 'type',
+              name: 'ad_code',
               type: 'varchar',
             },
             {
               name: 'title',
               type: 'varchar',
+            },
+            {
+              name: 'description',
+              type: 'varchar',
+            },
+            {
+              name: 'price',
+              type: 'int',
+            },
+            {
+              name: 'views',
+              type: 'int',
+            },
+            {
+              name: 'interests',
+              type: 'int',
             },
             {
               name: 'user_id',

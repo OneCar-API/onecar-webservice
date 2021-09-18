@@ -31,6 +31,10 @@ export class CreateCars1631588013095 implements MigrationInterface {
               type: 'varchar',
             },
             {
+              name: 'year_model',
+              type: 'varchar',
+            },
+            {
               name: 'fuel',
               type: 'varchar',
             },
