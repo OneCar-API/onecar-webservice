@@ -17,34 +17,47 @@ export class CreateCars1631588013095 implements MigrationInterface {
             {
               name: 'manufacturer',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'brand',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'model',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'year_manufacture',
               type: 'varchar',
+              isNullable: true,
+            },
+            {
+              name: 'year_model',
+              type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'fuel',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'gearbox_type',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'km',
               type: 'int',
+              isNullable: true,
             },
             {
               name: 'color',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'vehicle_item_id',

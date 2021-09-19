@@ -14,34 +14,34 @@ class VehicleItem {
   @Exclude()
   id: string;
 
-  @Column()
+  @Column({type: 'boolean', nullable: true})
   airbag: boolean;
 
-  @Column()
+  @Column({type: 'boolean', nullable: true})
   alarm: boolean;
 
-  @Column()
+  @Column({nullable: true})
   air_conditioning: boolean;
 
-  @Column()
+  @Column({nullable: true})
   eletric_lock: boolean;
 
-  @Column()
+  @Column({nullable: true})
   eletric_window: boolean;
 
-  @Column()
+  @Column({nullable: true})
   stereo: boolean;
 
-  @Column()
+  @Column({nullable: true})
   reverse_sensor: boolean;
 
-  @Column()
+  @Column({nullable: true})
   reverse_camera: boolean;
 
-  @Column()
+  @Column({nullable: true})
   armoured: boolean;
 
-  @Column()
+  @Column({nullable: true})
   hydraulic_steering: boolean;
 
   @CreateDateColumn()

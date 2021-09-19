@@ -9,6 +9,13 @@ import IUsersTokensRepository from '@modules/users/repositories/IUsersTokensRepo
 import UsersTokensRepository from '@modules/users/infra/typeorm/repositories/UsersTokensRepository';
 import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
 import AddressesRepository from '@modules/addresses/infra/typeorm/repositories/AddressesRepository';
+import IAdsRepository from '@modules/advertises/repositories/IAdsRepository';
+import AdsRepository from '@modules/advertises/infra/typeorm/repositories/AdsRepository';
+import ICarsRepository from '@modules/advertises/repositories/ICarsRepository';
+import CarsRepository from '@modules/advertises/infra/typeorm/repositories/CarsRepository';
+import IVehicleItemsRepository from '@modules/advertises/repositories/IVehicleItemsRepository';
+import VehicleItemsRepository from '@modules/advertises/infra/typeorm/repositories/VehicleItemsRepository';
+
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -25,3 +32,17 @@ container.registerSingleton<IAddressesRepository>(
   AddressesRepository,
 );
 
+container.registerSingleton<IAdsRepository>(
+  'AdsRepository',
+  AdsRepository,
+);
+
+container.registerSingleton<ICarsRepository>(
+  'CarsRepository',
+  CarsRepository,
+);
+
+container.registerSingleton<IVehicleItemsRepository>(
+  'VehicleItemsRepository',
+  VehicleItemsRepository,
+);
