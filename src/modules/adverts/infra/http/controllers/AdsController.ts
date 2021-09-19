@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 
-import CreateAdsService from '@modules/advertises/services/CreateAdsService';
-import ListAdsService from '@modules/advertises/services/ListAdsService';
+import CreateAdsService from '@modules/adverts/services/CreateAdsService';
+import ListAdsService from '@modules/adverts/services/ListAdsService';
 
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';

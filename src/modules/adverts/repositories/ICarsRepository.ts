@@ -1,5 +1,5 @@
 import ICreateCarDTO from '../dtos/ICreateCarDTO';
-import Car from '../../advertises/infra/typeorm/entities/Car';
+import Car from '../../adverts/infra/typeorm/entities/Car';
 
 export default interface ICarsRepository {
   import({

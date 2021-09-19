@@ -9,8 +9,8 @@ import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import { request } from 'express';
-import Ad from '../../advertises/infra/typeorm/entities/Ad';
-import VehicleItem from '../../advertises/infra/typeorm/entities/VehicleItem';
+import Ad from '../../adverts/infra/typeorm/entities/Ad';
+import VehicleItem from '../../adverts/infra/typeorm/entities/VehicleItem';
 
 interface IRequest {
   ad_code?: string;

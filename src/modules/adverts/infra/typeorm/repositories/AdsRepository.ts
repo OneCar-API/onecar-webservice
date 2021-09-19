@@ -1,8 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
 
-import IAdsRepository from '@modules/advertises/repositories/IAdsRepository';
-import ICreateAdDTO from '@modules/advertises/dtos/ICreateAdDTO';
-import Ad from '../../../../advertises/infra/typeorm/entities/Ad';
+import IAdsRepository from '@modules/adverts/repositories/IAdsRepository';
+import ICreateAdDTO from '@modules/adverts/dtos/ICreateAdDTO';
+import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
 
 class AdsRepository implements IAdsRepository {
   private ormRepository: Repository<Ad>;
