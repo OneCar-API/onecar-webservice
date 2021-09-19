@@ -4,43 +4,30 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToOne,
-  JoinColumn,
   OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
-import User from '../../../../users/infra/typeorm/entities/User';
 import Car from './Car';
 
-
-@Entity('ads')
-class Ad {
+@Entity('car_attachments')
+class CarAttachment {
   @PrimaryGeneratedColumn('uuid')
   @Exclude()
   id: string;
 
-  @Column()
-  ad_code: string;
+  @Column({nullable: true})
+  attachment: string;
 
-  @Column()
+  @Column({nullable: true})
+  type: string;
+
+  @Column({nullable: true})
   title: string;
 
-  @Column()
+  @Column({nullable: true})
   description: string;
-
-  @Column()
-  price: Number;
-
-  @Column()
-  views: Number;
-
-  @Column()
-  interests: Number;
-
-  @ManyToOne(() => User)
-  @JoinColumn({ name: 'user_id'})
-  user_id: User
 
   @OneToOne(() => Car)
   @JoinColumn({ name: 'car_id'})
@@ -53,4 +40,4 @@ class Ad {
   updated_at: Date;
 }
 
-export default Ad;
+export default CarAttachment;

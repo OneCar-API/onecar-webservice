@@ -2,7 +2,7 @@ import fs from 'fs';
 import mime from 'mime';
 import { S3 } from 'aws-sdk';
 import { resolve } from 'path';
-import request from 'request-promise';
+// import request from 'request-promise';
 
 import upload from '@config/upload';
 

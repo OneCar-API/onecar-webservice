@@ -17,18 +17,22 @@ export class CreateCarAttachments1631588908685 implements MigrationInterface {
             {
               name: 'attachment',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'type',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'title',
               type: 'varchar',
+              isNullable: true,
             },
             {
               name: 'car_id',
               type: 'uuid',
+              isNullable: true,
             },
             {
               name: 'created_at',

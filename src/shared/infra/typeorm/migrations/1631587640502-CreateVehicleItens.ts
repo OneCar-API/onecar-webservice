@@ -17,42 +17,52 @@ export class CreateVehicleItens1631587640502 implements MigrationInterface {
             {
               name: 'airbag',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'alarm',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'air_conditioning',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'eletric_lock',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'eletric_window',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'stereo',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'reverse_sensor',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'reverse_camera',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'armoured',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'hydraulic_steering',
               type: 'boolean',
+              isNullable: true,
             },
             {
               name: 'created_at',

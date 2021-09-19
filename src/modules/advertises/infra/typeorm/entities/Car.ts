@@ -17,31 +17,31 @@ class Car {
   @Exclude()
   id: string;
 
-  @Column()
+  @Column({nullable: true})
   manufacturer: string;
 
-  @Column()
+  @Column({nullable: true})
   brand: string;
 
-  @Column()
+  @Column({nullable: true})
   model: string;
 
-  @Column()
+  @Column({nullable: true})
   year_manufacture: string;
 
-  @Column()
+  @Column({nullable: true})
   year_model: string;
 
-  @Column()
+  @Column({nullable: true})
   fuel: string;
 
-  @Column()
+  @Column({nullable: true})
   gearbox_type: string;
 
-  @Column()
+  @Column({nullable: true})
   km: Number;
 
-  @Column()
+  @Column({nullable: true})
   color: string;
 
   @OneToOne(() => VehicleItem)

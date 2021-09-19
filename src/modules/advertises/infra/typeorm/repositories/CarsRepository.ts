@@ -1,8 +1,8 @@
 import { getRepository, Repository } from 'typeorm';
 
-import ICarsRepository from '@modules/ads/repositories/ICarsRepository';
-import ICreateCarDTO from '@modules/ads/dtos/ICreateCarDTO';
-import Car from '../entities/Car';
+import ICarsRepository from '@modules/advertises/repositories/ICarsRepository';
+import ICreateCarDTO from '@modules/advertises/dtos/ICreateCarDTO';
+import Car from '../../../../advertises/infra/typeorm/entities/Car';
 
 class CarsRepository implements ICarsRepository {
   private ormRepository: Repository<Car>;
@@ -37,6 +37,7 @@ class CarsRepository implements ICarsRepository {
     model,
     year_manufacture,
     year_model,
+    vehicle_item_id
   }: ICreateCarDTO): Promise<Car> {
     const car = this.ormRepository.create({
     manufacturer,
@@ -44,6 +45,7 @@ class CarsRepository implements ICarsRepository {
     model,
     year_manufacture,
     year_model,
+    vehicle_item_id
     });
 
     await this.ormRepository.save(car);

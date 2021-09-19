@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -7,8 +9,8 @@ import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import { request } from 'express';
-import Ad from '../infra/typeorm/entities/Ad';
-
+import Ad from '../../advertises/infra/typeorm/entities/Ad';
+import VehicleItem from '../../advertises/infra/typeorm/entities/VehicleItem';
 
 interface IRequest {
   ad_code?: string;
@@ -34,10 +36,7 @@ class CreateAdsService {
     @inject('AdsRepository')
     private adsRepository: IAdsRepository,
 
-    @inject('StorageProvider')
-    private storageProvider: IStorageProvider,
   ) {}
-
   public async execute({
     ad_code,
     manufacturer,
@@ -49,32 +48,26 @@ class CreateAdsService {
     cnpj,
     vehicle_price,
   }: IRequest): Promise<Ad> {
-    const vehicleItems = await this.vehicleItemsRepository.create({});
-    const vehicleItemsEntity = await this.vehicleItemsRepository.import(vehicleItems);
 
-    const vehicleId = vehicleItemsEntity.id
+    const vehicleItemsEntity = await this.vehicleItemsRepository.create({});
 
-    const carDTO = await this.carsRepository.create({
+    const car = await this.carsRepository.create({
       manufacturer,
       brand,
       model,
       year_manufacture,
       year_model,
-      vehicle_item_id: vehicleId
+      vehicle_item_id: vehicleItemsEntity
     });
-
-    const car = await this.carsRepository.import(carDTO)
-
-    const carId = car.id
 
     const ad = await this.adsRepository.create({
       ad_code,
       vehicle_price,
       user_id: request.user.id,
-      car_id: carId,
+      car_id: car,
     });
 
-    return ad;
+    return ad
   }
 }
 

@@ -1,5 +1,5 @@
 import ICreateAdDTO from '../dtos/ICreateAdDTO';
-import Ad from '../infra/typeorm/entities/Ad';
+import Ad from '../../advertises/infra/typeorm/entities/Ad';
 
 export default interface IAdsRepository {
   import({
@@ -9,4 +9,7 @@ export default interface IAdsRepository {
   create({
     ad_code,
     vehicle_price,
-  }: ICreateAdDTO)}
+  }: ICreateAdDTO): Promise<Ad>;
+  findById(id: string): Promise<Ad | undefined>;
+  findAll(): Promise<Ad[]>;
+}
