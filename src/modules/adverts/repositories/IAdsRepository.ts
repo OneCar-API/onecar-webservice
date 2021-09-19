@@ -1,5 +1,5 @@
 import ICreateAdDTO from '../dtos/ICreateAdDTO';
-import Ad from '../../advertises/infra/typeorm/entities/Ad';
+import Ad from '../../adverts/infra/typeorm/entities/Ad';
 
 export default interface IAdsRepository {
   import({

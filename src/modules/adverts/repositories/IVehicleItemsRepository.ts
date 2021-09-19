@@ -1,5 +1,5 @@
 import ICreateVehicleItemsDTO from '../dtos/ICreateVehicleItemsDTO';
-import VehicleItem from '../../advertises/infra/typeorm/entities/VehicleItem';
+import VehicleItem from '../../adverts/infra/typeorm/entities/VehicleItem';
 
 export default interface IVehicleItemsRepository {
   create({

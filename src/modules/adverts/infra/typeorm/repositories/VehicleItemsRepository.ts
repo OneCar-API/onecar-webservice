@@ -2,9 +2,9 @@ import 'reflect-metadata';
 
 import { getRepository, Repository } from 'typeorm';
 
-import IVehicleItemsRepository from '@modules/advertises/repositories/IVehicleItemsRepository';
-import ICreateVehicleItemsDTO from '@modules/advertises/dtos/ICreateVehicleItemsDTO';
-import VehicleItem from '../../../../advertises/infra/typeorm/entities/VehicleItem';
+import IVehicleItemsRepository from '@modules/adverts/repositories/IVehicleItemsRepository';
+import ICreateVehicleItemsDTO from '@modules/adverts/dtos/ICreateVehicleItemsDTO';
+import VehicleItem from '../../../../adverts/infra/typeorm/entities/VehicleItem';
 
 class VehicleItemsRepository implements IVehicleItemsRepository {
   private ormRepository: Repository<VehicleItem>;
