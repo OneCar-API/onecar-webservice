@@ -14,10 +14,12 @@ class AdsRepository implements IAdsRepository {
   public async import({
     ad_code,
     vehicle_price,
+    user_id
   }: ICreateAdDTO): Promise<Ad> {
     const ad = this.ormRepository.create({
       ad_code,
       price: vehicle_price,
+      user_id,
     });
 
     await this.ormRepository.save(ad);
@@ -28,10 +30,14 @@ class AdsRepository implements IAdsRepository {
   public async create({
     ad_code,
     vehicle_price,
+    user_id,
+    car_id
   }: ICreateAdDTO): Promise<Ad> {
     const ad = this.ormRepository.create({
       ad_code,
       price: vehicle_price,
+      user_id,
+      car_id
     });
 
     await this.ormRepository.save(ad);
