@@ -9,6 +9,55 @@
     }
   },
   "paths": {
+    "/user": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Cadastrar usuários",
+        "description": "Essa rota permite o cadastro de um usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "nickname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "document": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "John Doe",
+                  "nickname": "john.doe",
+                  "email": "johndoe@example.com",
+                  "password": "123456",
+                  "document": "90089747890"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Email address already in use"
+          }
+        }
+      }
+    },
+
     "/users/import": {
       "post": {
         "tags": ["Users"],

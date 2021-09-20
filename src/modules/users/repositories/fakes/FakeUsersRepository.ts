@@ -44,10 +44,7 @@ class FakeUsersRepository implements IUsersRepository {
     nickname,
     email,
     password,
-    phone,
     document,
-    cnpj,
-    is_legal,
   }: ICreateUserDTO): Promise<User> {
     const user = new User();
 
@@ -57,10 +54,8 @@ class FakeUsersRepository implements IUsersRepository {
       nickname,
       email,
       password,
-      phone,
       document,
-      cnpj,
-      is_legal,
+      is_legal: false,
     });
 
     this.users.push(user);
