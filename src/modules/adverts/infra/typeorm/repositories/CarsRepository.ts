@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import ICarsRepository from '@modules/adverts/repositories/ICarsRepository';
 import ICreateCarDTO from '@modules/adverts/dtos/ICreateCarDTO';
 import Car from '../../../../adverts/infra/typeorm/entities/Car';
+import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
 
 class CarsRepository implements ICarsRepository {
   private ormRepository: Repository<Car>;
@@ -70,8 +71,9 @@ class CarsRepository implements ICarsRepository {
   }
 
   public async findById(id: string): Promise<Car | undefined> {
-    const car = this.ormRepository.findOne(id);
-
+    const car = this.ormRepository.findOne({
+      where: id
+    });
     return car;
   }
 
@@ -79,6 +81,15 @@ class CarsRepository implements ICarsRepository {
     const cars = await this.ormRepository.find();
 
     return cars;
+  }
+
+  public async findByAd(ad: Ad): Promise<Car> {
+    const car = await this.ormRepository.findOneOrFail({
+      where: {
+        ad_id: ad.id
+      }
+    })
+    return car;
   }
 }
 

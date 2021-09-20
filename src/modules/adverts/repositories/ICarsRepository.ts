@@ -1,5 +1,6 @@
 import ICreateCarDTO from '../dtos/ICreateCarDTO';
 import Car from '../../adverts/infra/typeorm/entities/Car';
+import Ad from '../../adverts/infra/typeorm/entities/Ad';
 
 export default interface ICarsRepository {
   import({
@@ -20,5 +21,5 @@ export default interface ICarsRepository {
   agreeToSubscribeData(confirm_import: boolean): Promise<boolean>;
   findById(id: string): Promise<Car | undefined>;
   findAll(): Promise<Car[]>;
-
+  findByAd(ad: Ad): Promise<Car>;
 }

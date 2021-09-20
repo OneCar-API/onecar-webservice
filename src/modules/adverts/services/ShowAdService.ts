@@ -25,7 +25,7 @@ interface IRequest {
 }
 
 @injectable()
-class ListAdsService {
+class ShowAdService {
   constructor(
     @inject('VehicleItemsRepository')
     private vehicleItemsRepository: IVehicleItemsRepository,
@@ -37,12 +37,12 @@ class ListAdsService {
     private adsRepository: IAdsRepository,
 
   ) {}
-  public async execute(): Promise<Ad[]> {
-    const ads = await this.adsRepository.findAll()
+  public async execute(id: string): Promise<Ad | undefined> {
 
+    const ad = await this.adsRepository.findById(id);
 
-    return ads;
+    return ad;
   }
 }
 
-export default ListAdsService;
+export default ShowAdService;

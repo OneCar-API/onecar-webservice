@@ -1,8 +1,9 @@
-import { getRepository, Repository } from 'typeorm';
+import { getConnection, getRepository, Repository } from 'typeorm';
 
 import IAdsRepository from '@modules/adverts/repositories/IAdsRepository';
 import ICreateAdDTO from '@modules/adverts/dtos/ICreateAdDTO';
 import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
+import { lazy } from 'yup';
 
 class AdsRepository implements IAdsRepository {
   private ormRepository: Repository<Ad>;
@@ -62,13 +63,20 @@ class AdsRepository implements IAdsRepository {
   }
 
   public async findById(id: string): Promise<Ad | undefined> {
-    const ad = this.ormRepository.findOne(id);
+    const ad = this.ormRepository.findOne({
+      relations: ['car_id'],
+      where: {
+        id
+      }
+    });
 
     return ad;
   }
 
   public async findAll(): Promise<Ad[]> {
-    const ads = await this.ormRepository.find();
+    const ads = await this.ormRepository.find({
+      relations: ['car_id']
+    });
 
     return ads;
   }

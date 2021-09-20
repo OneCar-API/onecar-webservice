@@ -23,4 +23,10 @@ adsRouter.post(
   adsController.create,
 );
 
+adsRouter.get(
+  '/:id',
+  ensureAuthenticated,
+  adsController.index,
+);
+
 export default adsRouter;
