@@ -5,8 +5,31 @@ import ImportUsersService from '@modules/users/services/ImportUsersService';
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';
 import ShowUserService from '@modules/users/services/ShowUserService';
+import CreateUserService from '@modules/users/services/CreateUserService';
 
 export default class UsersController {
+  public async create(request: Request, response: Response): Promise<Response> {
+    const {
+      name,
+      nickname,
+      document,
+      email,
+      password
+    } = request.body;
+
+    const createUser = container.resolve(CreateUserService);
+
+    const user = await createUser.execute({
+      name,
+      nickname,
+      document,
+      email,
+      password,
+    });
+
+    return response.json(user);
+  }
+
   public async import(request: Request, response: Response): Promise<Response> {
     const { file } = request;
 

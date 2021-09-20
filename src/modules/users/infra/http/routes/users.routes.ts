@@ -13,6 +13,20 @@ const usersRouter = Router();
 const usersController = new UsersController();
 
 usersRouter.post(
+  '/user',
+  celebrate({
+    [Segments.BODY]: {
+      name: Joi.string().required(),
+      nickname: Joi.string().required(),
+      document: Joi.string().required(),
+      email: Joi.string().email().required(),
+      password: Joi.string().required(),
+    },
+  }),
+  usersController.create,
+);
+
+usersRouter.post(
   '/users/import',
   upload.single('file-users'),
   usersController.import,

@@ -3,8 +3,6 @@ export default interface ICreateUserDTO {
   nickname: string;
   email: string;
   password: string;
-  phone?: string;
   document: string;
-  cnpj?: string;
   is_legal: boolean;
 }
