@@ -19,6 +19,7 @@ adsRouter.get(
 
 adsRouter.post(
   '/',
+  ensureAuthenticated,
   adsController.create,
 );
 

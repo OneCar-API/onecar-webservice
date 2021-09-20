@@ -14,6 +14,10 @@ export default class AdsController {
 
     const createAdsService = container.resolve(CreateAdsService);
 
+    const user_id = request.user.id;
+
+    createAdDTO.user_id = user_id
+
     const createdAd = await createAdsService.execute(createAdDTO);
 
     return response

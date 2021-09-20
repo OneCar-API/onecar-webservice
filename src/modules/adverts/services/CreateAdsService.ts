@@ -9,8 +9,9 @@ import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import { request } from 'express';
-import Ad from '../../advertises/infra/typeorm/entities/Ad';
-import VehicleItem from '../../advertises/infra/typeorm/entities/VehicleItem';
+import Ad from '../../adverts/infra/typeorm/entities/Ad';
+import VehicleItem from '../../adverts/infra/typeorm/entities/VehicleItem';
+import User from '@modules/users/infra/typeorm/entities/User';
 
 interface IRequest {
   ad_code?: string;
@@ -22,6 +23,7 @@ interface IRequest {
   document?: string;
   cnpj?: string;
   vehicle_price?: string;
+  user_id: User;
 }
 
 @injectable()
@@ -47,11 +49,12 @@ class CreateAdsService {
     document,
     cnpj,
     vehicle_price,
+    user_id
   }: IRequest): Promise<Ad> {
 
     const vehicleItemsEntity = await this.vehicleItemsRepository.create({});
 
-    const car = await this.carsRepository.create({
+    const car_id = await this.carsRepository.create({
       manufacturer,
       brand,
       model,
@@ -60,11 +63,12 @@ class CreateAdsService {
       vehicle_item_id: vehicleItemsEntity
     });
 
+
     const ad = await this.adsRepository.create({
       ad_code,
       vehicle_price,
-      user_id: request.user.id,
-      car_id: car,
+      user_id,
+      car_id
     });
 
     return ad
