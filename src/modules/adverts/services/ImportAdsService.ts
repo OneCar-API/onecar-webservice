@@ -7,10 +7,11 @@ import * as Yup from 'yup';
 import csvParse from 'csv-parse';
 import cep from 'cep-promise';
 
-import { inject, injectable } from 'tsyringe';
+import { container, inject, injectable } from 'tsyringe';
 
 import objectIsEmpty from '@shared/defaultFunctions/functionObjectIsEmpty';
 
+import CreateAdsService from './CreateAdsService';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
@@ -19,6 +20,9 @@ import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import IImportAdsDTO from '../dtos/IImportAdsDTO';
 import add from 'date-fns/add';
+import User from '@modules/users/infra/typeorm/entities/User';
+import adsRouter from '../infra/http/routes/ads.routes';
+import AppError from '@shared/errors/AppError';
 
 export interface IImportAddress {
   zip_code?: string;
@@ -143,17 +147,23 @@ class ImportAdsService {
     });
   }
 
-  async execute(file: Express.Multer.File): Promise<IImportAdsDTO[]> {
+  async execute(file: Express.Multer.File, userId: string): Promise<IImportAdsDTO[]> {
     const adsFile = await this.loadUsers(file);
 
+    const createAdsService = container.resolve(CreateAdsService);
 
     adsFile.map(async ad => {
-      const { ad_cod, manufacturer, brand, model, year_manufacture, year_model,
+      const { ad_code, manufacturer, brand, model, year_manufacture, year_model,
         document, cnpj, price } = ad;
 
+      const user_id = await this.usersRepository.findById(userId);
 
-      const importUser = await this.adsRepository.import({
-        ad_cod,
+      if (!user_id) {
+        throw new AppError("Usuário inválido");
+      }
+
+      const importUser = await createAdsService.execute({
+        ad_code,
         manufacturer,
         brand,
         model,
@@ -161,8 +171,9 @@ class ImportAdsService {
         year_model,
         document,
         cnpj,
-        price
-      });
+        vehicle_price: price,
+        user_id
+      })
     });
 
     return this.adsFailed;

@@ -23,6 +23,13 @@ adsRouter.post(
   adsController.create,
 );
 
+adsRouter.post(
+  '/import',
+  upload.single('file-ads'),
+  ensureAuthenticated,
+  adsController.import,
+);
+
 adsRouter.get(
   '/:id',
   ensureAuthenticated,
