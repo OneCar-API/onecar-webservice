@@ -1,5 +1,7 @@
 # OneCar Webservice
 
+![Sem título-1_Prancheta 1](https://user-images.githubusercontent.com/56441318/133950991-44ac40d3-c041-4c7a-b35b-bbf84abc9c37.png)
+
 Este repositório é destinado à API do produto OneCar, seu site de vendas de carros.
 
 ## Iniciando as instalações
