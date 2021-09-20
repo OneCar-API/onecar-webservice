@@ -3,9 +3,11 @@ import { container } from 'tsyringe';
 
 import CreateAdsService from '@modules/adverts/services/CreateAdsService';
 import ListAdsService from '@modules/adverts/services/ListAdsService';
+import ShowAdService from '@modules/adverts/services/ShowAdService';
 
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';
+import AppError from '@shared/errors/AppError';
 
 export default class AdsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -34,6 +36,24 @@ export default class AdsController {
     return response
       .status(200)
       .json(ads);
+
+  }
+
+  public async index(request: Request, response: Response): Promise<Response> {
+    const listAdsService = container.resolve(ListAdsService);
+
+    const id = request.params.id;
+
+    if (!id) {
+      throw new AppError("Id inválido")
+    }
+
+    const showAdService = container.resolve(ShowAdService);
+
+    const ad = await showAdService.execute(id);
+    return response
+      .status(200)
+      .json(ad);
 
   }
 }
