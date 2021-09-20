@@ -1,49 +1,68 @@
-/* eslint-disable no-lonely-if */
 /* eslint-disable consistent-return */
 /* eslint-disable no-console */
-import csvParse from 'csv-parse';
 import fs from 'fs';
+import path from 'path';
+
 import * as Yup from 'yup';
+import csvParse from 'csv-parse';
+import cep from 'cep-promise';
 
 import { inject, injectable } from 'tsyringe';
 
-import AppError from '@shared/errors/AppError';
+import objectIsEmpty from '@shared/defaultFunctions/functionObjectIsEmpty';
 
-import IContactsRepository from '@modules/contacts/repositories/IContactsRepository';
-import IUserCompaniesRepository from '@modules/companies/repositories/IUserCompaniesRepository';
-import IContributorsRepository from '@modules/contributors/repositories/IContributorsRepository';
-import IStorageProvider from '@shared/container/providers/StorageProviders/models/IStorageProvider';
-import IContributorsAttachmentsRepository from '../repositories/IContributorsAttachmentsRepository';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
+import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
+import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
+import ICarsRepository from '../repositories/ICarsRepository';
+import IAdsRepository from '../repositories/IAdsRepository';
+import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
+import IImportAdsDTO from '../dtos/IImportAdsDTO';
+import add from 'date-fns/add';
 
-interface IImportAdsInterface {
-  ad_code?: string;
-  manufacturer?: string;
-  brand?: string;
-  model?: string;
-  year_manufacture?: string;
-  year_model?: string;
+export interface IImportAddress {
+  zip_code?: string;
+  neighborhood?: string;
+  state?: string;
+  city?: string;
+}
+
+interface IImportUsers {
+  name: string;
+  nickname: string;
+  email: string;
+  phone?: string;
   document?: string;
   cnpj?: string;
-  vehicle_price?: string;
+  is_legal?: boolean;
+  address?: IImportAddress;
+}
+
+interface IFormatDate {
+  name: string;
+  nickname: string;
+  email: string;
+  phone?: string;
+  document?: string;
+  cnpj?: string;
+  is_legal?: boolean;
+  address?: IImportAddress;
 }
 
 @injectable()
-class ImportContributorsAttachmentsService {
+class ImportAdsService {
   constructor(
-    @inject('ContributorsRepository')
-    private contributorsRepository: IContributorsRepository,
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
 
-    @inject('ContactsRepository')
-    private contactsRepository: IContactsRepository,
+    @inject('VehicleItemsRepository')
+    private vehicleItemsRepository: IVehicleItemsRepository,
 
-    @inject('UserCompaniesRepository')
-    private userCompaniesRepository: IUserCompaniesRepository,
+    @inject('CarsRepository')
+    private carsRepository: ICarsRepository,
 
-    @inject('ContributorsAttachmentsRepository')
-    private contributorsAttachmentsRepository: IContributorsAttachmentsRepository,
-
-    @inject('StorageProvider')
-    private storageProvider: IStorageProvider,
+    @inject('AdsRepository')
+    private adsRepository: IAdsRepository,
   ) {}
 
   async formatDocument(
@@ -60,46 +79,25 @@ class ImportContributorsAttachmentsService {
     return documentCSV;
   }
 
-  async formatType(type: string | undefined): Promise<string | undefined> {
-    if (!type) {
+  async formatCNPJ(cnpj: string | undefined): Promise<string | undefined> {
+    if (!cnpj) {
       return undefined;
     }
 
-    const typeCSV = type
-      .toLowerCase()
+    const cnpjCSV = cnpj
       .normalize('NFD')
-      .replace(/([\u0300-\u036f])/g, '');
+      .replace(/([\u0300-\u036f]|[^0-9a-zA-Z])/g, '');
 
-    let formattedType = 'text';
-
-    if (typeCSV === 'documento') {
-      formattedType = 'application';
-    }
-
-    if (typeCSV === 'imagem') {
-      formattedType = 'image';
-    }
-
-    if (typeCSV === 'video') {
-      formattedType = 'video';
-    }
-
-    if (typeCSV === 'audio') {
-      formattedType = 'audio';
-    }
-
-    return formattedType;
+    return cnpjCSV;
   }
 
-  contributorsAttachmentsFailed: IImportAdsInterface[] = [];
+  adsFailed: IImportAdsDTO[] = [];
 
-  async loadContributors(
-    file: Express.Multer.File,
-  ): Promise<IImportAdsInterface[]> {
+  async loadUsers(file: Express.Multer.File): Promise<IImportAdsDTO[]> {
     return new Promise((resolve, reject) => {
       const stream = fs.createReadStream(file.path);
 
-      let contributorsAttachments: IImportAdsInterface[] = [];
+      let ads: IImportAdsDTO[] = [];
 
       const parseFile = csvParse({
         from_line: 2,
@@ -110,23 +108,34 @@ class ImportContributorsAttachmentsService {
 
       parseFile
         .on('data', async line => {
-          const [document, title, description, type, attachment] = line;
+          const [
+            ad_cod,
+            manufacturer,
+            brand,
+            model,
+            year_manufacture,
+            year_model,
+            document,
+            cnpj,
+            price,
+          ] = line;
 
-          const collaboratorAttachment = {
+          const ad = {
+            ad_cod: ad_cod !== '' ? ad_cod : undefined,
+            manufacturer: manufacturer !== '' ? manufacturer : undefined,
+            brand: brand !== '' ? brand : undefined,
+            model: model !== '' ? model : undefined,
+            year_manufacture: year_manufacture !== '' ? year_manufacture : undefined,
+            year_model: year_model !== '' ? year_model : undefined,
             document: document !== '' ? document : undefined,
-            title: title !== '' ? title : undefined,
-            description: description !== '' ? description : undefined,
-            type: type !== '' ? type : undefined,
-            attachment: attachment !== '' ? attachment : undefined,
+            cnpj: cnpj !== '' ? cnpj : undefined,
+            price: price !== '' ? price : undefined,
           };
 
-          contributorsAttachments = [
-            collaboratorAttachment,
-            ...contributorsAttachments,
-          ];
+          ads = [ad, ...ads];
         })
         .on('end', () => {
-          resolve(contributorsAttachments);
+          resolve(ads);
         })
         .on('error', err => {
           reject(err);
@@ -134,185 +143,30 @@ class ImportContributorsAttachmentsService {
     });
   }
 
-  async formatContributorsAttachments(
-    contributorsFile: IImportAdsInterface[],
-  ): Promise<IImportAdsInterface[]> {
-    const schema = Yup.object().shape({
-      document: Yup.string().required(),
-    });
+  async execute(file: Express.Multer.File): Promise<IImportAdsDTO[]> {
+    const adsFile = await this.loadUsers(file);
 
-    const contributorsAttachmentsFormatted = Promise.all(
-      contributorsFile
-        .filter(async collaboratorAttachment => {
-          if (!(await schema.isValid(collaboratorAttachment))) {
-            this.contributorsAttachmentsFailed = [
-              collaboratorAttachment,
-              ...this.contributorsAttachmentsFailed,
-            ];
 
-            return;
-          }
+    adsFile.map(async ad => {
+      const { ad_cod, manufacturer, brand, model, year_manufacture, year_model,
+        document, cnpj, price } = ad;
 
-          return collaboratorAttachment;
-        })
-        .map(async collaboratorAttachment => {
-          const { document, type } = collaboratorAttachment;
 
-          const collaboratorAttachmentFormatted: IImportAdsInterface = {
-            ...collaboratorAttachment,
-            document: await this.formatDocument(document),
-            type: await this.formatType(type),
-          };
-
-          return collaboratorAttachmentFormatted;
-        }),
-    );
-
-    return contributorsAttachmentsFormatted;
-  }
-
-  async agreeToSubscribeData(confirm_import: boolean): Promise<boolean> {
-    const agreeToSubscribe = await this.contactsRepository.agreeToSubscribeData(
-      confirm_import,
-    );
-
-    if (agreeToSubscribe) {
-      return true;
-    }
-
-    return false;
-  }
-
-  async execute(
-    file: Express.Multer.File,
-    user_id: string,
-    company_id: string,
-    confirm_import: boolean,
-  ): Promise<IImportAdsInterface[]> {
-    const userCompany = await this.userCompaniesRepository.findUserCompany(
-      user_id,
-      company_id,
-    );
-
-    if (
-      userCompany?.user_id !== user_id &&
-      userCompany?.company_id !== company_id
-    ) {
-      throw new AppError('This company is not yours.', 403);
-    }
-
-    const contributorsFile = await this.loadContributors(file);
-
-    const contributors = await this.formatContributorsAttachments(
-      contributorsFile,
-    );
-
-    contributors.map(async collaboratorAttachment => {
-      const {
+      const importUser = await this.adsRepository.import({
+        ad_cod,
+        manufacturer,
+        brand,
+        model,
+        year_manufacture,
+        year_model,
         document,
-        title: titleResponse,
-        description,
-        type,
-        attachment,
-      } = collaboratorAttachment;
-
-      const title = titleResponse;
-
-      const agreeToSubscribe = confirm_import;
-
-      if (!attachment) {
-        throw new AppError('The file has no attachment.', 404);
-      }
-
-      if (!title) {
-        throw new AppError(
-          'The attachment has no title. You need to add one to continue.',
-          401,
-        );
-      }
-
-      if (document) {
-        const existContact = await this.contactsRepository.findIfExistThisDocumentInCompany(
-          userCompany.company_id,
-          document,
-        );
-
-        if (existContact) {
-          const findCollaborator = await this.contributorsRepository.findByContactId(
-            existContact.id,
-          );
-
-          if (findCollaborator) {
-            const fileName = `${findCollaborator.id}-${title}`;
-
-            const findCollaboratorAttachments = await this.contributorsAttachmentsRepository.findByTitle(
-              title,
-            );
-
-            const findCollaboratorAttachment = findCollaboratorAttachments[0];
-
-            if (agreeToSubscribe) {
-              if (findCollaboratorAttachment) {
-                const uploadAttachment = await this.storageProvider.saveLink(
-                  attachment,
-                  'attachment',
-                  fileName,
-                );
-
-                const updatedAttachment = await this.contributorsAttachmentsRepository.update(
-                  {
-                    collaborator_attachment_id: findCollaboratorAttachment.id,
-                    ...(title && { title }),
-                    description,
-                    ...(type && { type }),
-                    ...(attachment && { attachment: uploadAttachment }),
-                  },
-                );
-
-                return updatedAttachment;
-              }
-            } else {
-              const uploadAttachment = await this.storageProvider.saveLink(
-                attachment,
-                'attachment',
-                fileName,
-              );
-
-              const importAttachment = await this.contributorsAttachmentsRepository.import(
-                {
-                  company_id: userCompany.company_id,
-                  collaborator_id: findCollaborator.id,
-                  ...(title && { title }),
-                  description,
-                  ...(type && { type }),
-                  ...(attachment && { attachment: uploadAttachment }),
-                },
-              );
-
-              return importAttachment;
-            }
-
-            const uploadAttachment = await this.storageProvider.saveLink(
-              attachment,
-              'attachment',
-              fileName,
-            );
-
-            await this.contributorsAttachmentsRepository.import({
-              company_id: userCompany.company_id,
-              collaborator_id: findCollaborator.id,
-              ...(title && { title }),
-              description,
-              ...(type && { type }),
-              ...(attachment && { attachment: uploadAttachment }),
-            });
-          }
-        }
-      }
+        cnpj,
+        price
+      });
     });
 
-    return this.contributorsAttachmentsFailed;
+    return this.adsFailed;
   }
 }
 
-export default ImportContributorsAttachmentsService;
+export default ImportAdsService;
