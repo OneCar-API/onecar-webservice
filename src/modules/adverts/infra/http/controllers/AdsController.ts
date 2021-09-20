@@ -4,6 +4,7 @@ import { container } from 'tsyringe';
 import CreateAdsService from '@modules/adverts/services/CreateAdsService';
 import ListAdsService from '@modules/adverts/services/ListAdsService';
 import ShowAdService from '@modules/adverts/services/ShowAdService';
+import ImportAdsService from '@modules/adverts/services/ImportAdsService';
 
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';
@@ -55,5 +56,22 @@ export default class AdsController {
       .status(200)
       .json(ad);
 
+  }
+
+  public async import(request: Request, response: Response): Promise<Response> {
+    const { file } = request;
+
+    const importAdsService = container.resolve(ImportAdsService);
+
+    const user_id = request.user.id;
+
+    const adsFailed = await importAdsService.execute(
+      file as Express.Multer.File,
+      user_id,
+    );
+
+    return response
+      .status(200)
+      .json({ message: 'Your file has been imported!', adsFailed });
   }
 }

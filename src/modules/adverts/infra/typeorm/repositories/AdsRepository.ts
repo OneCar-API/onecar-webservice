@@ -4,6 +4,7 @@ import IAdsRepository from '@modules/adverts/repositories/IAdsRepository';
 import ICreateAdDTO from '@modules/adverts/dtos/ICreateAdDTO';
 import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
 import { lazy } from 'yup';
+import IImportAdsDTO from '@modules/adverts/dtos/IImportAdsDTO';
 
 class AdsRepository implements IAdsRepository {
   private ormRepository: Repository<Ad>;
@@ -14,12 +15,19 @@ class AdsRepository implements IAdsRepository {
 
   public async import({
     ad_code,
-    vehicle_price,
+    manufacturer,
+    brand,
+    model,
+    year_manufacture,
+    year_model,
+    document,
+    cnpj,
+    price,
     user_id
-  }: ICreateAdDTO): Promise<Ad> {
+  }: IImportAdsDTO): Promise<Ad> {
     const ad = this.ormRepository.create({
       ad_code,
-      price: vehicle_price,
+      price,
       user_id,
     });
 
