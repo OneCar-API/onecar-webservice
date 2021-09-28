@@ -23,6 +23,7 @@ export default interface IUsersRepository {
     document,
     cnpj,
     is_legal,
+    is_active,
   }: ICreateUserDTO): Promise<User>;
   generateRandomPassword(): Promise<string>;
   update({

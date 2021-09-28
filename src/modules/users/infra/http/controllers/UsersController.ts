@@ -13,8 +13,11 @@ export default class UsersController {
       name,
       nickname,
       document,
+      cnpj,
       email,
-      password
+      phone,
+      password,
+      is_legal,
     } = request.body;
 
     const createUser = container.resolve(CreateUserService);
@@ -23,11 +26,14 @@ export default class UsersController {
       name,
       nickname,
       document,
+      cnpj,
       email,
       password,
+      phone,
+      is_legal,
     });
 
-    return response.json(user);
+    return response.json(classToClass(user));
   }
 
   public async import(request: Request, response: Response): Promise<Response> {

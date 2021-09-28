@@ -32,8 +32,17 @@
                   "password": {
                     "type": "string"
                   },
+                  "phone": {
+                    "type": "string"
+                  },
                   "document": {
                     "type": "string"
+                  },
+                  "cnpj": {
+                    "type": "string"
+                  },
+                  "is_legal": {
+                    "type": "boolean"
                   }
                 },
                 "example": {
@@ -41,7 +50,10 @@
                   "nickname": "john.doe",
                   "email": "johndoe@example.com",
                   "password": "123456",
-                  "document": "90089747890"
+                  "phone": "12988786060",
+                  "document": "90089747890",
+                  "cnpj": "23987679000123",
+                  "is_legal": true
                 }
               }
             }
@@ -289,6 +301,9 @@
                       "is_legal": {
                         "type": "boolean"
                       },
+                      "is_active": {
+                        "type": "boolean"
+                      },
                       "created_at": {
                         "type": "number"
                       },
@@ -326,6 +341,81 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/user/confirm": {
+      "patch": {
+        "tags": ["Confirm Users"],
+        "summary": "Confirmação do cadastro do usuário através do token",
+        "description": "Após confirmação do cadastro, o campo active do usuário mudará para true, indicando que agora ele é um usuário ativo.",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "token": "5a3df27f-833b-4fb6-8601-74564ceb9cc7"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your account was successfully confirmed"
+          },
+          "401": {
+            "description": "Token expired"
+          },
+          "404": {
+            "description": "User does not exists / User token does not exists"
+          }
+        }
+      }
+    },
+
+    "/user/confirm/update-token": {
+      "put": {
+        "tags": ["Confirm Users"],
+        "summary": "Atualização da data de expiração do token",
+        "description": "Caso o token do usuário expire, essa rota deve ser chamada para que a data seja atualizada e um novo e-mail de confirmação de cadastro seja enviado ao cliente.",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "id": "5a3df27f-833b-4fb6-8601-74564ceb9cc7"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New e-mail confirmation was sent"
+          },
+          "404": {
+            "description": "User does not exists / User token does not exists"
           }
         }
       }

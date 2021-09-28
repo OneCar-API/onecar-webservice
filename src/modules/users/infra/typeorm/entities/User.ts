@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
-import Address from '@modules/addresses/infra/typeorm/entities/Address';
+import Address from '../../../../addresses/infra/typeorm/entities/Address';
 
 @Entity('users')
 class User {
@@ -39,6 +39,9 @@ class User {
 
   @Column()
   is_legal: boolean;
+
+  @Column()
+  is_active: boolean;
 
   confirm_import: boolean;
 

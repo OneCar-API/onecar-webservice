@@ -1,17 +1,29 @@
+import FakeMailProvider from '@shared/container/providers/MailProvider/fakes/FakeMailProvider';
 import AppError from '@shared/errors/AppError';
 import FakeHashProvider from '../providers/HashProvider/fakes/FakeHashProvider';
 import FakeUsersRepository from '../repositories/fakes/FakeUsersRepository';
+import FakeUsersTokensRepository from '../repositories/fakes/FakeUsersTokensRepository';
 import CreateUserService from './CreateUserService';
 
 let fakeUsersRepository: FakeUsersRepository;
+let fakeUsersTokensRepository: FakeUsersTokensRepository;
 let fakeHashProvider: FakeHashProvider;
+let fakeMailProvider: FakeMailProvider;
 let createUser: CreateUserService;
 
 describe('CreateUser', () => {
   beforeEach(() => {
     fakeUsersRepository = new FakeUsersRepository();
+    fakeUsersTokensRepository = new FakeUsersTokensRepository();
+    fakeHashProvider = new FakeHashProvider();
+    fakeMailProvider = new FakeMailProvider();
 
-    createUser = new CreateUserService(fakeUsersRepository, fakeHashProvider);
+    createUser = new CreateUserService(
+      fakeUsersRepository,
+      fakeUsersTokensRepository,
+      fakeHashProvider,
+      fakeMailProvider,
+    );
   });
 
   it('should be able to create a user', async () => {
@@ -20,7 +32,10 @@ describe('CreateUser', () => {
       nickname: 'john.doe',
       password: '123456',
       email: 'johndoe@example.com',
+      phone: '12987906565',
       document: '22287634090',
+      cnpj: '42800967000134',
+      is_legal: true,
     });
 
     expect(user).toHaveProperty('id');
@@ -32,7 +47,10 @@ describe('CreateUser', () => {
       nickname: 'john.doe',
       password: '123456',
       email: 'johndoe@example.com',
+      phone: '12987906565',
       document: '22287634090',
+      cnpj: '42800967000134',
+      is_legal: true,
     });
 
     await expect(
@@ -41,7 +59,10 @@ describe('CreateUser', () => {
         nickname: 'john.doe',
         password: '123456',
         email: 'johndoe@example.com',
+        phone: '12987906565',
         document: '22287634090',
+        cnpj: '42800967000134',
+        is_legal: true,
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

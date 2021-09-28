@@ -7,4 +7,5 @@ export default interface ICreateUserDTO {
   cnpj?: string;
   document: string;
   is_legal: boolean;
+  is_active: boolean;
 }

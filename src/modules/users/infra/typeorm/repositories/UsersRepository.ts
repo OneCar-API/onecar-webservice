@@ -43,17 +43,23 @@ class UsersRepository implements IUsersRepository {
     name,
     nickname,
     document,
+    cnpj,
     email,
+    phone,
     password,
     is_legal,
+    is_active,
   }: ICreateUserDTO): Promise<User> {
     const user = this.ormRepository.create({
       name,
       nickname,
       document,
+      cnpj,
       email,
+      phone,
       password,
       is_legal,
+      is_active,
     });
 
     await this.ormRepository.save(user);
@@ -227,6 +233,7 @@ class UsersRepository implements IUsersRepository {
         'user.document',
         'user.cnpj',
         'user.is_legal',
+        'user.is_active',
         'user.created_at',
         'user.updated_at',
         'address.id',
