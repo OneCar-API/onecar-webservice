@@ -4,6 +4,21 @@ import IUsersRepository from '../repositories/IUsersRepository';
 
 import User from '../infra/typeorm/entities/User';
 
+interface IRequest {
+  user_id: string;
+  offset?: number;
+  limit?: number;
+  filters?: {
+    user?: string;
+    address?: string;
+  };
+}
+
+interface IResponse {
+  total: number;
+  results: User[];
+}
+
 @injectable()
 class ListUsersService {
   constructor(
@@ -11,10 +26,31 @@ class ListUsersService {
     private usersRepository: IUsersRepository,
   ) {}
 
-  public async execute(): Promise<User[]> {
-    const users = await this.usersRepository.findAll();
+  public async execute({
+    filters,
+    offset,
+    limit,
+  }: IRequest): Promise<IResponse> {
+    const [
+      users,
+      totalUsers,
+      previous,
+      next,
+    ] = await this.usersRepository.findAll(
+      offset,
+      limit,
+      filters,
+    );
 
-    return users;
+    const responseFormatted = {
+      total: totalUsers,
+      previous,
+      next,
+      results: users,
+    };
+
+    return responseFormatted;
+
   }
 }
 

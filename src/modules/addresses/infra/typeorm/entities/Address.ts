@@ -27,7 +27,7 @@ class Address {
   @Column()
   state: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, user => user.address)
   @JoinColumn({ name: 'user_id' })
   user: User;
 

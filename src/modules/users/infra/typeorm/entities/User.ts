@@ -4,14 +4,15 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
+import Address from '@modules/addresses/infra/typeorm/entities/Address';
 
 @Entity('users')
 class User {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
   id: string;
 
   @Column()
@@ -40,6 +41,9 @@ class User {
   is_legal: boolean;
 
   confirm_import: boolean;
+
+  @OneToOne(() => Address, address => address.user)
+  address: Address;
 
   @CreateDateColumn()
   created_at: Date;

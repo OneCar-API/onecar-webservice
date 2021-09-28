@@ -47,11 +47,27 @@ export default class UsersController {
   public async index(request: Request, response: Response): Promise<Response> {
     const user_id = request.user.id;
 
-    const users = container.resolve(ListUsersService);
+    const {
+      user,
+      address,
+      offset,
+      limit,
+    } = request.query;
 
-    const allUsers = await users.execute();
 
-    return response.json(classToClass(allUsers));
+    const listUser = container.resolve(ListUsersService);
+
+    const users = await listUser.execute({
+      filters: {
+        user: user as string,
+        address: address as string,
+      },
+      offset: Number(offset),
+      limit: Number(limit),
+      user_id,
+    });
+
+    return response.json(classToClass(users));
   }
 
   public async show(request: Request, response: Response): Promise<Response> {

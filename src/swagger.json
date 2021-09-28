@@ -134,11 +134,49 @@
       }
     },
 
-    "/users": {
+    "/users?user=&address=": {
       "get": {
         "tags": ["Users"],
         "summary": "Busca todos os usuários da plataforma",
         "description": "Essa rota permite buscar todos os usuários da plataforma.",
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelo nome, e-mail e telefone do usuário."
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pela cidade e estado do usuário."
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que limita a quantidade de resultados por página."
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -149,12 +187,45 @@
                   "items": {
                     "type": "object",
                     "properties": {
-                      "email": {
-                        "type": "string"
+                      "total": {
+                        "type": "number"
                       },
-                      "password": {
-                        "type": "string"
-                      }
+                      "previous": {
+                        "type": "boolean"
+                      },
+                      "next": {
+                        "type": "boolean"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "number"
+                          },
+                          "address": {
+                            "id": {
+                              "type": "uuid"
+                            },
+                            "city": {
+                              "type": "string"
+                            },
+                            "state": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
                     }
                   }
                 }
@@ -194,11 +265,55 @@
                   "items": {
                     "type": "object",
                     "properties": {
+                      "id": {
+                        "type": "uuid"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "nickname": {
+                        "type": "string"
+                      },
                       "email": {
                         "type": "string"
                       },
-                      "password": {
+                      "phone": {
                         "type": "string"
+                      },
+                      "document": {
+                        "type": "string"
+                      },
+                      "cnpj": {
+                        "type": "string"
+                      },
+                      "is_legal": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "number"
+                      },
+                      "updated_at": {
+                        "type": "number"
+                      },
+                      "address": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "zip_code": {
+                            "type": "string"
+                          },
+                          "neighborhood": {
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          }
+                        }
                       }
                     }
                   }

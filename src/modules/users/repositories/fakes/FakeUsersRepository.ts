@@ -131,10 +131,58 @@ class FakeUsersRepository implements IUsersRepository {
     return findUser;
   }
 
-  public async findAll(): Promise<User[]> {
-    return this.users;
+  public async findAll(
+    offset?: number,
+    limit?: number,
+    filters?: {
+      user?: string;
+      address?: string;
+    },
+  ): Promise<[User[], number, boolean, boolean]> {
+    const findUsers = this.users.filter(user => {
+      if (
+        (filters?.user && user.name === filters?.user) ||
+        (filters?.address &&
+          user.address.city === filters?.address) ||
+        (offset && offset === offset) ||
+        (limit && limit === limit)
+      ) {
+        return user;
+      }
+
+      return null;
+    });
+
+    const totalUsers = findUsers.length;
+
+    let previous = true;
+
+    let next = true;
+
+    if (offset === 0) {
+      previous = false;
+    }
+
+    if (limit && offset) {
+      const existNextPage = limit + offset;
+
+      if (existNextPage >= totalUsers) {
+        next = false;
+      }
+    }
+
+    return [findUsers, totalUsers, previous, next];
   }
 
+  public async showUser(
+    user_id: string,
+  ): Promise<User | undefined> {
+    const showUser = this.users.find(
+      user => user.id === user_id,
+    );
+
+    return showUser;
+  }
 }
 
 export default FakeUsersRepository;

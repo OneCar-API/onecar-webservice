@@ -41,5 +41,15 @@ export default interface IUsersRepository {
   findByDocument(document: string): Promise<User | undefined>;
   findById(id: string): Promise<User | undefined>;
   findByEmail(email: string): Promise<User | undefined>;
-  findAll(): Promise<User[]>;
+  findAll(
+    offset?: number,
+    limit?: number,
+    filters?: {
+      user?: string;
+      address?: string;
+    },
+  ): Promise<[User[], number, boolean, boolean]>
+  showUser(
+    user_id: string,
+  ): Promise<User | undefined>;
 }

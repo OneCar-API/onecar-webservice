@@ -1,4 +1,4 @@
-import { getRepository, Repository } from 'typeorm';
+import { Brackets, getRepository, Repository } from 'typeorm';
 
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import IUpdateUserDTO from '@modules/users/dtos/IUpdateUserDTO';
@@ -134,10 +134,110 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  public async findAll(): Promise<User[]> {
-    const users = await this.ormRepository.find();
+  public async findAll(
+    offset?: number,
+    limit?: number,
+    filters?: {
+      user?: string;
+      address?: string;
+    },
+  ): Promise<[User[], number, boolean, boolean]> {
+    const usersQuery = this.ormRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.address', 'address')
+      .select([
+        'user.id',
+        'user.name',
+        'user.email',
+        'user.phone',
+        'user.created_at',
+        'address.id',
+        'address.city',
+        'address.state',
+      ])
+      .skip(offset || (offset = 0))
+      .take(limit || (limit = 20))
+      .orderBy('user.created_at', 'DESC');
 
-    return users;
+    if (filters?.user) {
+      usersQuery.andWhere(
+        new Brackets(qb => {
+          qb.where('user.name like :name', {
+            name: `%${filters.user}%`,
+          })
+            .orWhere('user.email like :email', {
+              email: `%${filters.user}%`,
+            })
+            .orWhere('user.phone like :phone', {
+              phone: `%${filters.user}%`,
+            })
+        }),
+      );
+    }
+
+    if (filters?.address) {
+      usersQuery.andWhere(
+        new Brackets(qb => {
+          qb.where('address.city like :city', {
+            city: `%${filters.address}%`,
+          })
+            .orWhere('address.state like :state', {
+              state: `%${filters.address}%`,
+            });
+        }),
+      );
+    }
+
+    const [users, totalUsers] = await usersQuery.getManyAndCount();
+
+    let previous = true;
+
+    let next = true;
+
+    if (offset === 0) {
+      previous = false;
+    }
+
+    if (limit) {
+      if (offset === 0 || (offset && offset !== 0)) {
+        const existNextPage = limit + offset;
+
+        if (existNextPage >= totalUsers) {
+          next = false;
+        }
+      }
+    }
+
+    return [users, totalUsers, previous, next];
+  }
+
+  public async showUser(
+    user_id: string,
+  ): Promise<User | undefined> {
+    const user = await this.ormRepository
+      .createQueryBuilder('user')
+      .where('user.id = :user_id', { user_id })
+      .leftJoinAndSelect('user.address', 'address')
+      .select([
+        'user.id',
+        'user.name',
+        'user.nickname',
+        'user.email',
+        'user.phone',
+        'user.document',
+        'user.cnpj',
+        'user.is_legal',
+        'user.created_at',
+        'user.updated_at',
+        'address.id',
+        'address.zip_code',
+        'address.neighborhood',
+        'address.city',
+        'address.state',
+      ])
+      .getOne();
+
+    return user;
   }
 }
 

@@ -32,7 +32,18 @@ usersRouter.post(
   usersController.import,
 );
 
-usersRouter.get('/users', ensureAuthenticated, usersController.index);
+usersRouter.get('/users',
+  celebrate({
+    [Segments.QUERY]: {
+      user: Joi.string().empty(''),
+      address: Joi.string().empty(''),
+      offset: Joi.number().empty(''),
+      limit: Joi.number().empty(''),
+    },
+  }),
+  ensureAuthenticated,
+  usersController.index,
+);
 
 usersRouter.get(
   '/user/:id',
