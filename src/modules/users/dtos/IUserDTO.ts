@@ -6,7 +6,8 @@ export default interface IUserDTO {
   phone?: string;
   document?: string;
   cnpj?: string;
-  is_legal?: string;
+  is_legal: boolean;
+  is_active: boolean;
   created_at: Date;
   updated_at: Date;
 }

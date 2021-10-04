@@ -21,6 +21,10 @@ passwordRouter.post(
 passwordRouter.post(
   '/reset',
   celebrate({
+    [Segments.QUERY]: {
+      token: Joi.string().uuid().required(),
+    },
+
     [Segments.BODY]: {
       token: Joi.string().uuid().required(),
       password: Joi.string().min(6).required(),

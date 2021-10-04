@@ -19,8 +19,11 @@ usersRouter.post(
       name: Joi.string().required(),
       nickname: Joi.string().required(),
       document: Joi.string().required(),
+      cnpj: Joi.string().empty(''),
       email: Joi.string().email().required(),
       password: Joi.string().required(),
+      phone: Joi.string().empty(''),
+      is_legal: Joi.boolean().required(),
     },
   }),
   usersController.create,
@@ -32,7 +35,18 @@ usersRouter.post(
   usersController.import,
 );
 
-usersRouter.get('/users', ensureAuthenticated, usersController.index);
+usersRouter.get('/users',
+  celebrate({
+    [Segments.QUERY]: {
+      user: Joi.string().empty(''),
+      address: Joi.string().empty(''),
+      offset: Joi.number().empty(''),
+      limit: Joi.number().empty(''),
+    },
+  }),
+  ensureAuthenticated,
+  usersController.index,
+);
 
 usersRouter.get(
   '/user/:id',

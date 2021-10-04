@@ -3,31 +3,22 @@
     width: 350px;
     padding: 20px;
   }
-
   .container_email {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
-
   .text_email {
     width: 600px;
     padding-top: 15px;
   }
-
   .text_email h1 {
     color: #5E9DBC;
   }
-
-  .text_email h4 {
-    color: #5E9DBC;
-  }
-
   .text_email p {
     color: #555555;
   }
-
   .button_email button {
     margin-top: 20px;
     border: none;
@@ -39,12 +30,10 @@
     color: #fff;
     font-weight: bold;
   }
-
   .footer_email {
     margin-top: 70px;
     color: #555555;
   }
-
   .footer_email h4 {
     color: #5E9DBC;
   }
@@ -54,26 +43,15 @@
   <div class="text_email">
     <h1>Olá, {{name}}!</h1>
     <p>
-      Você recebeu um convite para entrar em nossa plataforma!
+      Seja muito bem-vindo!
       <br />
-
-      Suas credenciais de acesso estão logo abaixo:
-      <br />
-
-      <h4>
-        E-mail: {{email}}
-        <br />
-        Senha: {{password}}
-      </h4>
-    </p>
-    <p>
-      Para confirmar seu convite, clique no link abaixo:
+      Para confirmar seu cadastro em nossa plataforma, acesse o link abaixo:
     </p>
   </div>
   <div class="button_email">
     <a href="{{link}}">
       <button type="submit">
-        Confirmar convite
+        Confirmar cadastro
       </button>
     </a>
   </div>
