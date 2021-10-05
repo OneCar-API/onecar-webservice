@@ -72,7 +72,9 @@ class CarsRepository implements ICarsRepository {
 
   public async findById(id: string): Promise<Car | undefined> {
     const car = this.ormRepository.findOne({
-      where: id
+      where: {
+        id
+      }
     });
     return car;
   }

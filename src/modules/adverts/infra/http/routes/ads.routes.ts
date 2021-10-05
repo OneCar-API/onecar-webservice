@@ -30,6 +30,11 @@ adsRouter.post(
   adsController.import,
 );
 
+adsRouter.put(
+  '/:id',
+  ensureAuthenticated,
+  adsController.updateAd)
+
 adsRouter.get(
   '/:id',
   ensureAuthenticated,

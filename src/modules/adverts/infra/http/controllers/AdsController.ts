@@ -5,6 +5,7 @@ import CreateAdsService from '@modules/adverts/services/CreateAdsService';
 import ListAdsService from '@modules/adverts/services/ListAdsService';
 import ShowAdService from '@modules/adverts/services/ShowAdService';
 import ImportAdsService from '@modules/adverts/services/ImportAdsService';
+import UpdateAdService from '@modules/adverts/services/UpdateAdService';
 
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';
@@ -37,7 +38,6 @@ export default class AdsController {
     return response
       .status(200)
       .json(ads);
-
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
@@ -73,5 +73,21 @@ export default class AdsController {
     return response
       .status(200)
       .json({ message: 'Your file has been imported!', adsFailed });
+  }
+
+  public async updateAd(request: Request, response: Response): Promise<Response> {
+    const updateService = container.resolve(UpdateAdService);
+
+    const requestBody = request.body;
+
+    requestBody.ad_id = request.params.id;
+
+    console.log(requestBody);
+
+    const updatedAd = await updateService.execute(requestBody);
+
+    return response
+      .status(200)
+      .json(updatedAd);
   }
 }

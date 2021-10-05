@@ -54,6 +54,10 @@ class AdsRepository implements IAdsRepository {
     return ad;
   }
 
+  public async update(ad: Ad): Promise<Ad> {
+    return await this.update(ad);
+  }
+
   public async save(ad: Ad): Promise<Ad> {
     return this.ormRepository.save(ad);
   }

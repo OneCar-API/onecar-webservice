@@ -22,4 +22,6 @@ export default interface IAdsRepository {
   }: ICreateAdDTO): Promise<Ad>;
   findById(id: string): Promise<Ad | undefined>;
   findAll(): Promise<Ad[]>;
+  update(ad: Ad): Promise<Ad>;
+  save(ad: Ad): Promise<Ad>;
 }
