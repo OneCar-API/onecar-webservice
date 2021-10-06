@@ -1,6 +1,5 @@
 export default interface IUpdateVehicleItemsDTO {
   ad_id?: string;
-  id?: string;
   airbag?: boolean;
   alarm?: boolean;
   air_conditioning?: boolean;

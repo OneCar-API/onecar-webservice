@@ -41,8 +41,6 @@ class UpdateAdService {
   }: UpdateAdDTO): Promise<Ad> {
     const ad = await this.adsRepository.findById(ad_id);
 
-    console.log(ad);
-
     if (!ad) {
       throw new AppError('Ad not found');
     }
@@ -53,25 +51,24 @@ class UpdateAdService {
       throw new AppError('Car not found');
     }
 
-    Object.assign(ad.price, vehicle_price);
-    Object.assign(ad.title, title);
-    Object.assign(ad.description, description);
+    ad.price = Number(vehicle_price);
+    ad.title = title ? title : "";
+    ad.description = description ? description : "";
 
-    const updatedAd = await this.adsRepository.save(ad);
-
-    Object.assign(car.manufacturer, manufacturer);
-    Object.assign(car.brand, brand);
-    Object.assign(car.model, model);
-    Object.assign(car.year_manufacture, year_manufacture);
-    Object.assign(car.year_model, year_model);
-    Object.assign(car.fuel, fuel);
-    Object.assign(car.gearbox_type, gearbox_type);
-    Object.assign(car.km, km);
-    Object.assign(car.color, color);
+    car.manufacturer = manufacturer ? manufacturer : "";
+    car.brand = brand ? brand : "";
+    car.model = model ? model : "";
+    car.year_manufacture = year_manufacture ? year_manufacture : "";
+    car.year_model = year_model ? year_model : "";
+    car.fuel = fuel ? fuel : "";
+    car.gearbox_type = gearbox_type ? gearbox_type : "";
+    car.km = km ? km : new Number();
+    car.color = color ? color : "";
 
     await this.carsRepository.save(car);
+    const newAd = await this.adsRepository.save(ad);
 
-    return updatedAd;
+    return newAd;
   }
 }
 

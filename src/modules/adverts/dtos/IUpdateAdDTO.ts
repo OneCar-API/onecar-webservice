@@ -11,5 +11,5 @@ export default interface IUpdateAdDTO {
   gearbox_type?: string;
   km?: Number;
   color?: string;
-  vehicle_price?: string;
+  vehicle_price?: Number;
 }

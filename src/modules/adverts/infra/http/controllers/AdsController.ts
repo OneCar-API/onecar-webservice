@@ -6,6 +6,7 @@ import ListAdsService from '@modules/adverts/services/ListAdsService';
 import ShowAdService from '@modules/adverts/services/ShowAdService';
 import ImportAdsService from '@modules/adverts/services/ImportAdsService';
 import UpdateAdService from '@modules/adverts/services/UpdateAdService';
+import UpdateVehicleItemsService from '@modules/adverts/services/UpdateVehicleItemsService';
 
 import ListUsersService from '@modules/users/services/ListUsersService';
 import { classToClass } from 'class-transformer';
@@ -82,9 +83,21 @@ export default class AdsController {
 
     requestBody.ad_id = request.params.id;
 
-    console.log(requestBody);
-
     const updatedAd = await updateService.execute(requestBody);
+
+    return response
+      .status(200)
+      .json(updatedAd);
+  }
+
+  public async updateVehicleItems(request: Request, response: Response): Promise<Response> {
+    const updateItemsService = container.resolve(UpdateVehicleItemsService);
+
+    const requestBody = request.body;
+
+    requestBody.ad_id = request.params.id;
+
+    const updatedAd = await updateItemsService.execute(requestBody);
 
     return response
       .status(200)
