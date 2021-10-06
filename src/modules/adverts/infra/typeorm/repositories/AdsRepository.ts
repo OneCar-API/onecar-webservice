@@ -3,8 +3,8 @@ import { getConnection, getRepository, Repository } from 'typeorm';
 import IAdsRepository from '@modules/adverts/repositories/IAdsRepository';
 import ICreateAdDTO from '@modules/adverts/dtos/ICreateAdDTO';
 import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
-import { lazy } from 'yup';
 import IImportAdsDTO from '@modules/adverts/dtos/IImportAdsDTO';
+import AppError from '@shared/errors/AppError';
 
 class AdsRepository implements IAdsRepository {
   private ormRepository: Repository<Ad>;
@@ -55,7 +55,12 @@ class AdsRepository implements IAdsRepository {
   }
 
   public async save(ad: Ad): Promise<Ad> {
-    return this.ormRepository.save(ad);
+    await this.ormRepository.save(ad);
+    const newAd = await this.findById(ad.id);
+    if (!newAd) {
+      throw new AppError('Error during recovering Ad entity');
+    };
+    return newAd;
   }
 
   public async agreeToSubscribeData(confirm_import: boolean): Promise<boolean> {
@@ -71,7 +76,7 @@ class AdsRepository implements IAdsRepository {
   }
 
   public async findById(id: string): Promise<Ad | undefined> {
-    const ad = this.ormRepository.findOne({
+    const ad = await this.ormRepository.findOne({
       relations: ['car_id'],
       where: {
         id

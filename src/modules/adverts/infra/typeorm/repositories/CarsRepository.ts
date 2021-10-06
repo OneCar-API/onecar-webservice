@@ -4,6 +4,7 @@ import ICarsRepository from '@modules/adverts/repositories/ICarsRepository';
 import ICreateCarDTO from '@modules/adverts/dtos/ICreateCarDTO';
 import Car from '../../../../adverts/infra/typeorm/entities/Car';
 import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
+import AppError from '@shared/errors/AppError';
 
 class CarsRepository implements ICarsRepository {
   private ormRepository: Repository<Car>;
@@ -55,7 +56,12 @@ class CarsRepository implements ICarsRepository {
   }
 
   public async save(car: Car): Promise<Car> {
-    return this.ormRepository.save(car);
+    await this.ormRepository.save(car);
+    const newCar = await this.findById(car.id);
+    if (!newCar) {
+      throw new AppError('Error during recovering car entity');
+    };
+    return newCar;
   }
 
   public async agreeToSubscribeData(confirm_import: boolean): Promise<boolean> {
@@ -71,8 +77,11 @@ class CarsRepository implements ICarsRepository {
   }
 
   public async findById(id: string): Promise<Car | undefined> {
-    const car = this.ormRepository.findOne({
-      where: id
+    const car = await this.ormRepository.findOne({
+      relations: ['vehicle_item_id'],
+      where: {
+        id
+      }
     });
     return car;
   }

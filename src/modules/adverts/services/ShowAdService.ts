@@ -41,6 +41,26 @@ class ShowAdService {
 
     const ad = await this.adsRepository.findById(id);
 
+    if(!ad) {
+      throw new AppError('Ad entity were not found');
+    }
+
+    const carId = ad.car_id.id;
+
+    const car = await this.carsRepository.findById(carId);
+
+    if(!car) {
+      throw new AppError('Car entity were not found');
+    }
+
+    const itemsId = car.vehicle_item_id.id;
+
+    const items = await this.vehicleItemsRepository.findById(itemsId);
+
+    if (items) {
+      ad.car_id.vehicle_item_id = items;
+    }
+
     return ad;
   }
 }

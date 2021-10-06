@@ -30,9 +30,18 @@ adsRouter.post(
   adsController.import,
 );
 
-adsRouter.get(
+adsRouter.put(
   '/:id',
   ensureAuthenticated,
+  adsController.updateAd)
+
+adsRouter.put(
+  '/vehicle-items/:id',
+  ensureAuthenticated,
+  adsController.updateVehicleItems)
+
+adsRouter.get(
+  '/:id',
   adsController.index,
 );
 
