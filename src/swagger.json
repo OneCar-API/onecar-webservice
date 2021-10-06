@@ -40,9 +40,6 @@
                   },
                   "cnpj": {
                     "type": "string"
-                  },
-                  "is_legal": {
-                    "type": "boolean"
                   }
                 },
                 "example": {
@@ -52,8 +49,7 @@
                   "password": "123456",
                   "phone": "12988786060",
                   "document": "90089747890",
-                  "cnpj": "23987679000123",
-                  "is_legal": true
+                  "cnpj": "23987679000123"
                 }
               }
             }
