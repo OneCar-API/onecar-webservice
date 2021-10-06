@@ -35,7 +35,6 @@ describe('CreateUser', () => {
       phone: '12987906565',
       document: '22287634090',
       cnpj: '42800967000134',
-      is_legal: true,
     });
 
     expect(user).toHaveProperty('id');
@@ -50,7 +49,6 @@ describe('CreateUser', () => {
       phone: '12987906565',
       document: '22287634090',
       cnpj: '42800967000134',
-      is_legal: true,
     });
 
     await expect(
@@ -62,7 +60,7 @@ describe('CreateUser', () => {
         phone: '12987906565',
         document: '22287634090',
         cnpj: '42800967000134',
-        is_legal: true,
+
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

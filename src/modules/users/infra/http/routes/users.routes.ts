@@ -23,7 +23,6 @@ usersRouter.post(
       email: Joi.string().email().required(),
       password: Joi.string().required(),
       phone: Joi.string().empty(''),
-      is_legal: Joi.boolean().required(),
     },
   }),
   usersController.create,

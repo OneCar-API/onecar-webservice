@@ -18,7 +18,6 @@ interface IRequest {
   email: string;
   password: string;
   phone?: string;
-  is_legal: boolean;
 }
 
 
@@ -46,7 +45,6 @@ class CreateUserService {
       email,
       phone,
       password,
-      is_legal,
     }: IRequest): Promise<User> {
     const checkUserExists = await this.usersRepository.findByEmail(email);
 
@@ -64,7 +62,7 @@ class CreateUserService {
       email,
       password: hashedPassword,
       phone,
-      is_legal,
+      is_legal: cnpj ? true : false,
       is_active: false,
     });
 

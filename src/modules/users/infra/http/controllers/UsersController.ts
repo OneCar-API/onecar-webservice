@@ -17,7 +17,6 @@ export default class UsersController {
       email,
       phone,
       password,
-      is_legal,
     } = request.body;
 
     const createUser = container.resolve(CreateUserService);
@@ -30,7 +29,6 @@ export default class UsersController {
       email,
       password,
       phone,
-      is_legal,
     });
 
     return response.json(classToClass(user));
