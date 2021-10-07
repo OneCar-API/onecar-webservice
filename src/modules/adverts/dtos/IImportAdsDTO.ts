@@ -11,4 +11,5 @@ export default interface IImportAdsDTO {
   cnpj?: string;
   price?: string;
   user_id?: User;
+  image: string;
 }
