@@ -6,5 +6,5 @@ export default interface ICreateAdDTO {
   ad_code?: string;
   vehicle_price?: string;
   user_id?: User;
-  car_id: Car;
+  car_id: string;
 }

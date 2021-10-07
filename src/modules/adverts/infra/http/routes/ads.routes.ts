@@ -6,7 +6,7 @@ import AdsController from '../controllers/AdsController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import { celebrate, Joi, Segments } from 'celebrate';
 
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 const adsRouter = Router();
 
@@ -43,6 +43,19 @@ adsRouter.put(
 adsRouter.get(
   '/:id',
   adsController.index,
+);
+
+adsRouter.patch(
+  '/:ad_id/car/:car_id/car-image',
+  celebrate({
+    [Segments.PARAMS]: {
+      ad_id: Joi.string().uuid().required(),
+      car_id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  upload.single('image'),
+  adsController.upload,
 );
 
 export default adsRouter;

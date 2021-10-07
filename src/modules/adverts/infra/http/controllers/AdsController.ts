@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
+import { classToClass } from 'class-transformer';
 
 import CreateAdsService from '@modules/adverts/services/CreateAdsService';
 import ListAdsService from '@modules/adverts/services/ListAdsService';
@@ -8,9 +9,8 @@ import ImportAdsService from '@modules/adverts/services/ImportAdsService';
 import UpdateAdService from '@modules/adverts/services/UpdateAdService';
 import UpdateVehicleItemsService from '@modules/adverts/services/UpdateVehicleItemsService';
 
-import ListUsersService from '@modules/users/services/ListUsersService';
-import { classToClass } from 'class-transformer';
 import AppError from '@shared/errors/AppError';
+import UploadCarImagesService from '@modules/adverts/services/UploadCarImagesService';
 
 export default class AdsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -38,7 +38,7 @@ export default class AdsController {
 
     return response
       .status(200)
-      .json(ads);
+      .json(classToClass(ads));
   }
 
   public async index(request: Request, response: Response): Promise<Response> {
@@ -55,7 +55,7 @@ export default class AdsController {
     const ad = await showAdService.execute(id);
     return response
       .status(200)
-      .json(ad);
+      .json(classToClass(ad));
 
   }
 
@@ -87,7 +87,7 @@ export default class AdsController {
 
     return response
       .status(200)
-      .json(updatedAd);
+      .json(classToClass(updatedAd));
   }
 
   public async updateVehicleItems(request: Request, response: Response): Promise<Response> {
@@ -102,5 +102,27 @@ export default class AdsController {
     return response
       .status(200)
       .json(updatedAd);
+  }
+
+  public async upload(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+
+    const { car_id } = request.params;
+
+    const imageCarFilename = request.file?.filename;
+
+    const uploadCarImage = container.resolve(
+      UploadCarImagesService,
+    );
+
+    const carAttachmentFilename = await uploadCarImage.execute(
+      {
+        user_id,
+        car_id,
+        imageCarFilename: imageCarFilename as string,
+      },
+    );
+
+    return response.json(classToClass(carAttachmentFilename));
   }
 }

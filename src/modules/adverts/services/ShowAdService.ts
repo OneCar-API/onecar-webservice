@@ -45,7 +45,7 @@ class ShowAdService {
       throw new AppError('Ad entity were not found');
     }
 
-    const carId = ad.car_id.id;
+    const carId = ad.car.id;
 
     const car = await this.carsRepository.findById(carId);
 
@@ -53,12 +53,12 @@ class ShowAdService {
       throw new AppError('Car entity were not found');
     }
 
-    const itemsId = car.vehicle_item_id.id;
+    const itemsId = car.vehicle_item_id;
 
     const items = await this.vehicleItemsRepository.findById(itemsId);
 
     if (items) {
-      ad.car_id.vehicle_item_id = items;
+      ad.car.vehicleItem = items;
     }
 
     return ad;
