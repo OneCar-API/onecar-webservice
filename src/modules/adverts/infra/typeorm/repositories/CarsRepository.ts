@@ -47,7 +47,7 @@ class CarsRepository implements ICarsRepository {
     model,
     year_manufacture,
     year_model,
-    vehicle_item_id
+    vehicle_item_id,
     });
 
     await this.ormRepository.save(car);
@@ -78,7 +78,7 @@ class CarsRepository implements ICarsRepository {
 
   public async findById(id: string): Promise<Car | undefined> {
     const car = await this.ormRepository.findOne({
-      relations: ['vehicle_item_id'],
+      relations: ['vehicleItem'],
       where: {
         id
       }

@@ -46,7 +46,7 @@ class AdsRepository implements IAdsRepository {
       ad_code,
       price: vehicle_price,
       user_id,
-      car_id
+      car_id,
     });
 
     await this.ormRepository.save(ad);
@@ -77,7 +77,7 @@ class AdsRepository implements IAdsRepository {
 
   public async findById(id: string): Promise<Ad | undefined> {
     const ad = await this.ormRepository.findOne({
-      relations: ['car_id'],
+      relations: ['car'],
       where: {
         id
       }
@@ -88,7 +88,7 @@ class AdsRepository implements IAdsRepository {
 
   public async findAll(): Promise<Ad[]> {
     const ads = await this.ormRepository.find({
-      relations: ['car_id']
+      relations: ['car']
     });
 
     return ads;

@@ -54,13 +54,13 @@ class CreateAdsService {
 
     const vehicleItemsEntity = await this.vehicleItemsRepository.create({});
 
-    const car_id = await this.carsRepository.create({
+    const car = await this.carsRepository.create({
       manufacturer,
       brand,
       model,
       year_manufacture,
       year_model,
-      vehicle_item_id: vehicleItemsEntity
+      vehicle_item_id: vehicleItemsEntity.id,
     });
 
 
@@ -68,7 +68,7 @@ class CreateAdsService {
       ad_code,
       vehicle_price,
       user_id,
-      car_id
+      car_id: car.id,
     });
 
     return ad

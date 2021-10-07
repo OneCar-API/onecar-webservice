@@ -42,9 +42,13 @@ class Ad {
   @JoinColumn({ name: 'user_id'})
   user_id: User
 
-  @OneToOne(() => Car)
+  @OneToOne(() => Car, car => car.ad)
   @JoinColumn({ name: 'car_id'})
-  car_id: Car;
+  car: Car;
+
+  @Column()
+  car_id: string;
+
 
   @CreateDateColumn()
   created_at: Date;

@@ -4,9 +4,11 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
+import Car from './Car';
 
 @Entity('vehicle_items')
 class VehicleItem {
@@ -43,6 +45,9 @@ class VehicleItem {
 
   @Column({nullable: true})
   hydraulic_steering: boolean;
+
+  @OneToOne(() => Car, car => car.vehicleItem)
+  car: Car;
 
   @CreateDateColumn()
   created_at: Date;
