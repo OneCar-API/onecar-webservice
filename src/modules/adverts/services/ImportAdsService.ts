@@ -23,41 +23,20 @@ import add from 'date-fns/add';
 import User from '@modules/users/infra/typeorm/entities/User';
 import adsRouter from '../infra/http/routes/ads.routes';
 import AppError from '@shared/errors/AppError';
-
-export interface IImportAddress {
-  zip_code?: string;
-  neighborhood?: string;
-  state?: string;
-  city?: string;
-}
-
-interface IImportUsers {
-  name: string;
-  nickname: string;
-  email: string;
-  phone?: string;
-  document?: string;
-  cnpj?: string;
-  is_legal?: boolean;
-  address?: IImportAddress;
-}
-
-interface IFormatDate {
-  name: string;
-  nickname: string;
-  email: string;
-  phone?: string;
-  document?: string;
-  cnpj?: string;
-  is_legal?: boolean;
-  address?: IImportAddress;
-}
+import IStorageProvider from '@shared/container/providers/StorageProviders/models/IStorageProvider';
+import ICarsImagesRepository from '../repositories/ICarsImagesRpository';
 
 @injectable()
 class ImportAdsService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('StorageProvider')
+    private storageProvider: IStorageProvider,
+
+    @inject('CarsImagesRepository')
+    private carsImagesRepository: ICarsImagesRepository,
 
     @inject('VehicleItemsRepository')
     private vehicleItemsRepository: IVehicleItemsRepository,
@@ -122,6 +101,7 @@ class ImportAdsService {
             document,
             cnpj,
             price,
+            image,
           ] = line;
 
           const ad = {
@@ -134,6 +114,7 @@ class ImportAdsService {
             document: document !== '' ? document : undefined,
             cnpj: cnpj !== '' ? cnpj : undefined,
             price: price !== '' ? price : undefined,
+            image: image !== '' ? image : undefined,
           };
 
           ads = [ad, ...ads];
@@ -154,7 +135,7 @@ class ImportAdsService {
 
     adsFile.map(async ad => {
       const { ad_code, manufacturer, brand, model, year_manufacture, year_model,
-        document, cnpj, price } = ad;
+        document, cnpj, price, image } = ad;
 
       const user_id = await this.usersRepository.findById(userId);
 
@@ -172,7 +153,12 @@ class ImportAdsService {
         document,
         cnpj,
         vehicle_price: price,
-        user_id
+        user_id,
+      })
+
+      await this.carsImagesRepository.create({
+        car_id: importUser.car_id,
+        image,
       })
     });
 
