@@ -8,6 +8,7 @@ import ShowAdService from '@modules/adverts/services/ShowAdService';
 import ImportAdsService from '@modules/adverts/services/ImportAdsService';
 import UpdateAdService from '@modules/adverts/services/UpdateAdService';
 import UpdateVehicleItemsService from '@modules/adverts/services/UpdateVehicleItemsService';
+import DeleteAdService from '@modules/adverts/services/DeleteAdService';
 
 import AppError from '@shared/errors/AppError';
 import UploadCarImagesService from '@modules/adverts/services/UploadCarImagesService';
@@ -125,4 +126,19 @@ export default class AdsController {
 
     return response.json(classToClass(carAttachmentFilename));
   }
+
+  public async destroy(request: Request, response: Response): Promise<Response> {
+    const service = container.resolve(DeleteAdService);
+
+    const id = request.params.id;
+
+    const user_id = request.user.id;
+
+    const serviceResponse = await service.execute(id, user_id);
+
+    return response
+      .status(200)
+      .json({ message: serviceResponse });
+  }
+
 }

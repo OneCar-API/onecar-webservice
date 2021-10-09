@@ -21,4 +21,5 @@ export default interface ICarsRepository {
   findById(id: string): Promise<Car | undefined>;
   findAll(): Promise<Car[]>;
   findByAd(ad: Ad): Promise<Car | undefined>;
+  delete(id: string): Promise<String>
 }

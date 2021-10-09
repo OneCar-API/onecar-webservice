@@ -77,7 +77,7 @@ class AdsRepository implements IAdsRepository {
 
   public async findById(id: string): Promise<Ad | undefined> {
     const ad = await this.ormRepository.findOne({
-      relations: ['car'],
+      relations: ['car', 'user_id'],
       where: {
         id
       }
@@ -92,6 +92,11 @@ class AdsRepository implements IAdsRepository {
     });
 
     return ads;
+  }
+
+  public async delete(id: string): Promise<String> {
+    await this.ormRepository.delete(id);
+    return "Ad deleted";
   }
 }
 

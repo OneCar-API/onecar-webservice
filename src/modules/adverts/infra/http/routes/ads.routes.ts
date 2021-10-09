@@ -58,4 +58,10 @@ adsRouter.patch(
   adsController.upload,
 );
 
+adsRouter.delete(
+  '/:id',
+  ensureAuthenticated,
+  adsController.destroy
+)
+
 export default adsRouter;
