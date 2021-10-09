@@ -57,6 +57,11 @@ class VehicleItemsRepository implements IVehicleItemsRepository {
 
     return vehicleItems;
   }
+
+  public async delete(id: string): Promise<String> {
+    await this.ormRepository.delete(id);
+    return "VehicleItem deleted";
+  }
 }
 
 export default VehicleItemsRepository;

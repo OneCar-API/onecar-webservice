@@ -17,4 +17,5 @@ export default interface IVehicleItemsRepository {
   save(vehicleItem: VehicleItem): Promise<VehicleItem>;
   findById(id: string): Promise<VehicleItem | undefined>;
   findAll(): Promise<VehicleItem[]>;
+  delete(id: string): Promise<String>;
 }
