@@ -111,4 +111,16 @@ adsRouter.patch(
   adsController.upload,
 );
 
+adsRouter.delete(
+  '/:id',
+  ensureAuthenticated,
+  adsController.destroy
+)
+
+adsRouter.get(
+  '/myAds/show',
+  ensureAuthenticated,
+  adsController.listByUser
+)
+
 export default adsRouter;

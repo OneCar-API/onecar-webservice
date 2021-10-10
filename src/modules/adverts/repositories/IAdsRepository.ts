@@ -44,4 +44,6 @@ export default interface IAdsRepository {
   showAd(
     ad_id: string,
   ): Promise<Ad | undefined>;
+  delete(id: string): Promise<String>;
+  findAllByUser(user_id: string): Promise<Ad[]>;
 }

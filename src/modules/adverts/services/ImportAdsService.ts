@@ -7,7 +7,9 @@ import csvParse from 'csv-parse';
 
 import { container, inject, injectable } from 'tsyringe';
 
-import CreateAdsService from './CreateAdsService';
+import objectIsEmpty from '@shared/defaultFunctions/functionObjectIsEmpty';
+
+import CreateImportedAdService from './CreateImportedAdService';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
@@ -122,7 +124,7 @@ class ImportAdsService {
   async execute(file: Express.Multer.File, userId: string): Promise<IImportAdsDTO[]> {
     const adsFile = await this.loadUsers(file);
 
-    const createAdsService = container.resolve(CreateAdsService);
+    const createAdsService = container.resolve(CreateImportedAdService);
 
     adsFile.map(async ad => {
       const { ad_code, manufacturer, brand, model, year_manufacture, year_model,

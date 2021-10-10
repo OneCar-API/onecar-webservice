@@ -2,12 +2,15 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
-import CreateAdsService from '@modules/adverts/services/CreateAdsService';
+import CreateIndividualAdService from '@modules/adverts/services/CreateIndividualAdService';
 import ListAdsService from '@modules/adverts/services/ListAdsService';
 import ShowAdService from '@modules/adverts/services/ShowAdService';
 import ImportAdsService from '@modules/adverts/services/ImportAdsService';
 import UpdateAdService from '@modules/adverts/services/UpdateAdService';
 import UpdateVehicleItemsService from '@modules/adverts/services/UpdateVehicleItemsService';
+import DeleteAdService from '@modules/adverts/services/DeleteAdService';
+import ListAdsByUserService from '@modules/adverts/services/ListAdsByUserService';
+
 
 import AppError from '@shared/errors/AppError';
 import UploadCarImagesService from '@modules/adverts/services/UploadCarImagesService';
@@ -17,11 +20,11 @@ export default class AdsController {
 
     const createAdDTO = request.body;
 
-    const createAdsService = container.resolve(CreateAdsService);
+    const createAdsService = container.resolve(CreateIndividualAdService);
 
     const user_id = request.user.id;
 
-    createAdDTO.user_id = user_id
+    createAdDTO.user_id = user_id;
 
     const createdAd = await createAdsService.execute(createAdDTO);
 
@@ -155,5 +158,31 @@ export default class AdsController {
     );
 
     return response.json(classToClass(carAttachmentFilename));
+  }
+
+  public async destroy(request: Request, response: Response): Promise<Response> {
+    const service = container.resolve(DeleteAdService);
+
+    const id = request.params.id;
+
+    const user_id = request.user.id;
+
+    const serviceResponse = await service.execute(id, user_id);
+
+    return response
+      .status(200)
+      .json({ message: serviceResponse });
+  }
+
+  public async listByUser(request: Request, response: Response): Promise<Response> {
+    const service = container.resolve(ListAdsByUserService);
+
+    const user_id = request.user.id;
+
+    const serviceResponse = await service.execute(user_id);
+
+    return response
+      .status(200)
+      .json(serviceResponse);
   }
 }
