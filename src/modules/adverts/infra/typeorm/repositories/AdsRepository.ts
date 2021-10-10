@@ -88,7 +88,7 @@ class AdsRepository implements IAdsRepository {
 
   public async findAll(): Promise<Ad[]> {
     const ads = await this.ormRepository.find({
-      relations: ['car']
+      relations: ['car', 'user_id']
     });
 
     return ads;
@@ -97,6 +97,17 @@ class AdsRepository implements IAdsRepository {
   public async delete(id: string): Promise<String> {
     await this.ormRepository.delete(id);
     return "Ad deleted";
+  }
+
+  public async findAllByUser(user_id: string): Promise<Ad[]> {
+    const ads = await this.ormRepository.
+    find(
+      {
+        relations: ['car', 'user_id'],
+        where: { user_id }
+      },
+    );
+    return ads;
   }
 }
 
