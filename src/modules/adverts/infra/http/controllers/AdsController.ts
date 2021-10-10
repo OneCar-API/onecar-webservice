@@ -27,36 +27,67 @@ export default class AdsController {
 
     return response
       .status(200)
-      .json({ message: 'Your file has been imported!',
-              ad: createdAd });
+      .json(createdAd);
   }
 
   public async show(request: Request, response: Response): Promise<Response> {
-    const listAdsService = container.resolve(ListAdsService);
+    const { ad_id } = request.params;
 
-    const ads = await listAdsService.execute();
+    const showAd = container.resolve(ShowAdService);
 
-    return response
-      .status(200)
-      .json(classToClass(ads));
-  }
+    const ad = await showAd.execute(ad_id);
 
-  public async index(request: Request, response: Response): Promise<Response> {
-    const listAdsService = container.resolve(ListAdsService);
-
-    const id = request.params.id;
-
-    if (!id) {
-      throw new AppError("Id inválido")
-    }
-
-    const showAdService = container.resolve(ShowAdService);
-
-    const ad = await showAdService.execute(id);
     return response
       .status(200)
       .json(classToClass(ad));
+  }
 
+  public async index(request: Request, response: Response): Promise<Response> {
+    const {
+      user,
+      car,
+      address,
+      airbag,
+      alarm,
+      air_conditioning,
+      eletric_lock,
+      eletric_window,
+      stereo,
+      reverse_sensor,
+      reverse_camera,
+      armoured,
+      hydraulic_steering,
+      fromKm,
+      toKm,
+      offset,
+      limit,
+    } = request.query;
+
+    const listAds = container.resolve(ListAdsService);
+
+    const ads = await listAds.execute({
+      filters: {
+        user: user as string,
+        car: car as string,
+        address: address as string,
+        airbag: Boolean(airbag),
+        alarm: Boolean(alarm),
+        air_conditioning: Boolean(air_conditioning),
+        eletric_lock: Boolean(eletric_lock),
+        eletric_window: Boolean(eletric_window),
+        stereo: Boolean(stereo),
+        reverse_sensor: Boolean(reverse_sensor),
+        reverse_camera: Boolean(reverse_camera),
+        armoured: Boolean(armoured),
+        hydraulic_steering: Boolean(hydraulic_steering),
+        fromKm: Number(fromKm),
+        toKm: Number(hydraulic_steering),
+      },
+      offset: Number(offset),
+      limit: Number(limit),
+    });
+
+    return response.json(classToClass(ads));
   }
 
   public async import(request: Request, response: Response): Promise<Response> {

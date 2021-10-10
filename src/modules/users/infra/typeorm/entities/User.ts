@@ -5,10 +5,12 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToOne,
+  OneToMany,
 } from 'typeorm';
 
 import { Exclude } from 'class-transformer';
 import Address from '../../../../addresses/infra/typeorm/entities/Address';
+import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
 
 @Entity('users')
 class User {
@@ -47,6 +49,9 @@ class User {
 
   @OneToOne(() => Address, address => address.user)
   address: Address;
+
+  @OneToMany(() => Ad, ads => ads.user)
+  ads: Ad[];
 
   @CreateDateColumn()
   created_at: Date;

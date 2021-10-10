@@ -17,7 +17,6 @@ import Ad from '../../../infra/typeorm/entities/Ad';
 @Entity('cars')
 class Car {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
   id: string;
 
   @Column({nullable: true})

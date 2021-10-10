@@ -1,5 +1,3 @@
-import VehicleItem from "../infra/typeorm/entities/VehicleItem";
-
 export default interface ICreateCarDTO {
   manufacturer?: string;
   brand?: string;

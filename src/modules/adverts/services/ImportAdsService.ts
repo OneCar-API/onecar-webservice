@@ -3,25 +3,16 @@
 import fs from 'fs';
 import path from 'path';
 
-import * as Yup from 'yup';
 import csvParse from 'csv-parse';
-import cep from 'cep-promise';
 
 import { container, inject, injectable } from 'tsyringe';
 
-import objectIsEmpty from '@shared/defaultFunctions/functionObjectIsEmpty';
-
 import CreateAdsService from './CreateAdsService';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
-import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
-import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
 import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import IImportAdsDTO from '../dtos/IImportAdsDTO';
-import add from 'date-fns/add';
-import User from '@modules/users/infra/typeorm/entities/User';
-import adsRouter from '../infra/http/routes/ads.routes';
 import AppError from '@shared/errors/AppError';
 import IStorageProvider from '@shared/container/providers/StorageProviders/models/IStorageProvider';
 import ICarsImagesRepository from '../repositories/ICarsImagesRpository';
@@ -137,10 +128,10 @@ class ImportAdsService {
       const { ad_code, manufacturer, brand, model, year_manufacture, year_model,
         document, cnpj, price, image } = ad;
 
-      const user_id = await this.usersRepository.findById(userId);
+      const user = await this.usersRepository.findById(userId);
 
-      if (!user_id) {
-        throw new AppError("Usuário inválido");
+      if (!user) {
+        throw new AppError('User not found', 404);
       }
 
       const importUser = await createAdsService.execute({
@@ -150,16 +141,11 @@ class ImportAdsService {
         model,
         year_manufacture,
         year_model,
-        document,
-        cnpj,
-        vehicle_price: price,
-        user_id,
-      })
-
-      await this.carsImagesRepository.create({
-        car_id: importUser.car_id,
-        image,
-      })
+        ...(document && { document }),
+        ...(cnpj && { cnpj }),
+        ...(price && { price }),
+        user_id: user.id,
+      });
     });
 
     return this.adsFailed;

@@ -1,5 +1,3 @@
-import User from "@modules/users/infra/typeorm/entities/User";
-
 export default interface IImportAdsDTO {
   ad_code?: string;
   manufacturer?: string;
@@ -10,6 +8,6 @@ export default interface IImportAdsDTO {
   document?: string;
   cnpj?: string;
   price?: string;
-  user_id?: User;
+  user_id?: string;
   image: string;
 }

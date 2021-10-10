@@ -17,7 +17,6 @@ import Car from './Car';
 @Entity('ads')
 class Ad {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
   id: string;
 
   @Column()
@@ -38,9 +37,12 @@ class Ad {
   @Column({nullable: true})
   interests: Number;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, user => user.ads)
   @JoinColumn({ name: 'user_id'})
-  user_id: User
+  user: User
+
+  @Column()
+  user_id: string;
 
   @OneToOne(() => Car, car => car.ad)
   @JoinColumn({ name: 'car_id'})

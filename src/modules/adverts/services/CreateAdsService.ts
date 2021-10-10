@@ -1,17 +1,12 @@
-import 'reflect-metadata';
-
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
-import IStorageProvider from '@shared/container/providers/StorageProviders/models/IStorageProvider';
 
 import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
-import { request } from 'express';
 import Ad from '../../adverts/infra/typeorm/entities/Ad';
-import VehicleItem from '../../adverts/infra/typeorm/entities/VehicleItem';
-import User from '@modules/users/infra/typeorm/entities/User';
+import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 interface IRequest {
   ad_code?: string;
@@ -23,7 +18,7 @@ interface IRequest {
   document?: string;
   cnpj?: string;
   vehicle_price?: string;
-  user_id: User;
+  user_id: string;
 }
 
 @injectable()
@@ -31,6 +26,9 @@ class CreateAdsService {
   constructor(
     @inject('VehicleItemsRepository')
     private vehicleItemsRepository: IVehicleItemsRepository,
+
+    @inject('UsersRepository')
+    private usersRepository: IUsersRepository,
 
     @inject('CarsRepository')
     private carsRepository: ICarsRepository,
@@ -46,11 +44,14 @@ class CreateAdsService {
     model,
     year_manufacture,
     year_model,
-    document,
-    cnpj,
     vehicle_price,
     user_id
   }: IRequest): Promise<Ad> {
+    const user = await this.usersRepository.findById(user_id);
+
+    if (!user) {
+      throw new AppError('User not found', 404);
+    }
 
     const vehicleItemsEntity = await this.vehicleItemsRepository.create({});
 
@@ -63,15 +64,14 @@ class CreateAdsService {
       vehicle_item_id: vehicleItemsEntity.id,
     });
 
-
     const ad = await this.adsRepository.create({
       ad_code,
       vehicle_price,
-      user_id,
+      user_id: user.id,
       car_id: car.id,
     });
 
-    return ad
+    return ad;
   }
 }
 

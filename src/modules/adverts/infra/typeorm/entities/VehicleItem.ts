@@ -13,7 +13,6 @@ import Car from './Car';
 @Entity('vehicle_items')
 class VehicleItem {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
   id: string;
 
   @Column({type: 'boolean', nullable: true})
