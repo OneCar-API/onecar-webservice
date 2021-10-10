@@ -24,4 +24,5 @@ export default interface IAdsRepository {
   findAll(): Promise<Ad[]>;
   save(ad: Ad): Promise<Ad>;
   delete(id: string): Promise<String>;
+  findAllByUser(user_id: string): Promise<Ad[]>;
 }

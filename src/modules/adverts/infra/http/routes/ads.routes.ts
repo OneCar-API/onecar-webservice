@@ -64,4 +64,10 @@ adsRouter.delete(
   adsController.destroy
 )
 
+adsRouter.get(
+  '/myAds/show',
+  ensureAuthenticated,
+  adsController.listByUser
+)
+
 export default adsRouter;

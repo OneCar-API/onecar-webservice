@@ -9,6 +9,8 @@ import ImportAdsService from '@modules/adverts/services/ImportAdsService';
 import UpdateAdService from '@modules/adverts/services/UpdateAdService';
 import UpdateVehicleItemsService from '@modules/adverts/services/UpdateVehicleItemsService';
 import DeleteAdService from '@modules/adverts/services/DeleteAdService';
+import ListAdsByUserService from '@modules/adverts/services/ListAdsByUserService';
+
 
 import AppError from '@shared/errors/AppError';
 import UploadCarImagesService from '@modules/adverts/services/UploadCarImagesService';
@@ -141,4 +143,15 @@ export default class AdsController {
       .json({ message: serviceResponse });
   }
 
+  public async listByUser(request: Request, response: Response): Promise<Response> {
+    const service = container.resolve(ListAdsByUserService);
+
+    const user_id = request.user.id;
+
+    const serviceResponse = await service.execute(user_id);
+
+    return response
+      .status(200)
+      .json(serviceResponse);
+  }
 }

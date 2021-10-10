@@ -8,24 +8,17 @@ import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import Ad from '../../adverts/infra/typeorm/entities/Ad';
 
 @injectable()
-class ListAdsService {
+class ListAdsByUserService {
   constructor(
-    @inject('VehicleItemsRepository')
-    private vehicleItemsRepository: IVehicleItemsRepository,
-
-    @inject('CarsRepository')
-    private carsRepository: ICarsRepository,
-
     @inject('AdsRepository')
     private adsRepository: IAdsRepository,
 
   ) {}
-  public async execute(): Promise<Ad[]> {
-    const ads = await this.adsRepository.findAll()
-
+  public async execute(user_id: string): Promise<Ad[]> {
+    const ads = await this.adsRepository.findAllByUser(user_id)
 
     return ads;
   }
 }
 
-export default ListAdsService;
+export default ListAdsByUserService;
