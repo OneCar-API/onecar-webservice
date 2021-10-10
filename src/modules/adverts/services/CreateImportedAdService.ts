@@ -27,7 +27,7 @@ interface IRequest {
 }
 
 @injectable()
-class CreateAdsService {
+class CreateImportedAdService {
   constructor(
     @inject('VehicleItemsRepository')
     private vehicleItemsRepository: IVehicleItemsRepository,
@@ -75,4 +75,4 @@ class CreateAdsService {
   }
 }
 
-export default CreateAdsService;
+export default CreateImportedAdService;
