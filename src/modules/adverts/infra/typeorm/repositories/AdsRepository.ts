@@ -356,7 +356,7 @@ class AdsRepository implements IAdsRepository {
     const ads = await this.ormRepository.
     find(
       {
-        relations: ['car', 'user_id'],
+        relations: ['car', 'user'],
         where: { user_id }
       },
     );
