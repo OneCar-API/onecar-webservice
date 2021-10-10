@@ -10,7 +10,7 @@ interface IRequest {
   limit?: number;
   filters?: {
     user?: string;
-    address?: string;
+    address?: string; 
   };
 }
 
