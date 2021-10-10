@@ -9,6 +9,7 @@ import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import Ad from '../../adverts/infra/typeorm/entities/Ad';
 import UpdateAdDTO from '../dtos/IUpdateAdDTO';
+import { request } from 'express';
 
 
 @injectable()
@@ -45,7 +46,13 @@ class UpdateAdService {
       throw new AppError('Ad not found');
     }
 
-    const car = await this.carsRepository.findById(ad.car_id.id);
+    const requestUserId = request.user.id;
+
+    if (ad.user_id.id != requestUserId) {
+      throw new AppError('Permission denied');
+    }
+
+    const car = await this.carsRepository.findById(ad.car_id);
 
     if (!car) {
       throw new AppError('Car not found');

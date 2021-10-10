@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { classToClass } from 'class-transformer';
 
-import CreateAdsService from '@modules/adverts/services/CreateAdsService';
+import CreateIndividualAdService from '@modules/adverts/services/CreateIndividualAdService';
 import ListAdsService from '@modules/adverts/services/ListAdsService';
 import ShowAdService from '@modules/adverts/services/ShowAdService';
 import ImportAdsService from '@modules/adverts/services/ImportAdsService';
@@ -18,17 +18,17 @@ export default class AdsController {
 
     const createAdDTO = request.body;
 
-    const createAdsService = container.resolve(CreateAdsService);
+    const createAdsService = container.resolve(CreateIndividualAdService);
 
     const user_id = request.user.id;
 
-    createAdDTO.user_id = user_id
+    createAdDTO.user_id = user_id;
 
     const createdAd = await createAdsService.execute(createAdDTO);
 
     return response
       .status(200)
-      .json({ message: 'Your file has been imported!',
+      .json({ message: 'Your user has been created!',
               ad: createdAd });
   }
 
