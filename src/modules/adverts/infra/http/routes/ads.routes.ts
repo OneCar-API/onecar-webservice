@@ -1,24 +1,41 @@
 import { Router } from 'express';
+import { celebrate, Joi, Segments } from 'celebrate';
 import multer from 'multer';
 
 import uploadConfig from '@config/upload';
 import AdsController from '../controllers/AdsController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
-import { celebrate, Joi, Segments } from 'celebrate';
 
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 const adsRouter = Router();
 
 const adsController = new AdsController();
 
 adsRouter.get(
-  '/',
+  '/:ad_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      ad_id: Joi.string().uuid().required(),
+    },
+  }),
   adsController.show,
 );
 
 adsRouter.post(
   '/',
+  celebrate({
+    [Segments.BODY]: {
+      manufacturer: Joi.string().empty(''),
+      brand: Joi.string().empty(''),
+      model: Joi.string().empty(''),
+      year_manufacture: Joi.string().empty(''),
+      year_model: Joi.string().empty(''),
+      vehicle_item_id: Joi.string().uuid().empty(''),
+      ad_cod: Joi.string().empty(''),
+      vehicle_price: Joi.string().empty(''),
+    },
+  }),
   ensureAuthenticated,
   adsController.create,
 );
@@ -32,6 +49,21 @@ adsRouter.post(
 
 adsRouter.put(
   '/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      ad_id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      manufacturer: Joi.string().empty(''),
+      brand: Joi.string().empty(''),
+      model: Joi.string().empty(''),
+      year_manufacture: Joi.string().empty(''),
+      year_model: Joi.string().empty(''),
+      vehicle_item_id: Joi.string().uuid().empty(''),
+      ad_cod: Joi.string().empty(''),
+      vehicle_price: Joi.string().empty(''),
+    },
+  }),
   ensureAuthenticated,
   adsController.updateAd)
 
@@ -41,8 +73,42 @@ adsRouter.put(
   adsController.updateVehicleItems)
 
 adsRouter.get(
-  '/:id',
+  '/',
+  celebrate({
+    [Segments.QUERY]: {
+      user: Joi.string().empty(''),
+      car: Joi.string().empty(''),
+      address: Joi.string().empty(''),
+      airbag: Joi.boolean().empty(null),
+      alarm: Joi.boolean().empty(null),
+      air_conditioning: Joi.boolean().empty(null),
+      eletric_lock: Joi.boolean().empty(null),
+      eletric_window: Joi.boolean().empty(null),
+      stereo: Joi.boolean().empty(null),
+      reverse_sensor: Joi.boolean().empty(null),
+      reverse_camera: Joi.boolean().empty(null),
+      armoured: Joi.boolean().empty(null),
+      hydraulic_steering: Joi.boolean().empty(null),
+      fromKm: Joi.number().empty(null),
+      toKm: Joi.number().empty(null),
+      offset: Joi.number().empty(''),
+      limit: Joi.number().empty(''),
+    },
+  }),
   adsController.index,
+);
+
+adsRouter.patch(
+  '/:ad_id/car/:car_id/car-image',
+  celebrate({
+    [Segments.PARAMS]: {
+      ad_id: Joi.string().uuid().required(),
+      car_id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  upload.single('image'),
+  adsController.upload,
 );
 
 export default adsRouter;

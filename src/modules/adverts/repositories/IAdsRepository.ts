@@ -21,6 +21,27 @@ export default interface IAdsRepository {
     car_id
   }: ICreateAdDTO): Promise<Ad>;
   findById(id: string): Promise<Ad | undefined>;
-  findAll(): Promise<Ad[]>;
   save(ad: Ad): Promise<Ad>;
+  findAll(
+    offset?: number,
+    limit?: number,
+    filters?: {
+      user?: string;
+      car?: string;
+      address?: string;
+      airbag?: boolean;
+      alarm?: boolean;
+      air_conditioning?: boolean;
+      eletric_lock?: boolean;
+      eletric_window?: boolean;
+      stereo?: boolean;
+      reverse_sensor?: boolean;
+      reverse_camera?: boolean;
+      armoured?: boolean;
+      hydraulic_steering?: boolean;
+    },
+  ): Promise<[Ad[], number, boolean, boolean]>;
+  showAd(
+    ad_id: string,
+  ): Promise<Ad | undefined>;
 }

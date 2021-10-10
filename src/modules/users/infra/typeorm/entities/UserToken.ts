@@ -12,7 +12,6 @@ import { Exclude } from 'class-transformer';
 @Entity('users_tokens')
 class UserToken {
   @PrimaryGeneratedColumn('uuid')
-  @Exclude()
   id: string;
 
   @Column()

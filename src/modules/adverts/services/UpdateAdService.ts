@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -45,7 +43,7 @@ class UpdateAdService {
       throw new AppError('Ad not found');
     }
 
-    const car = await this.carsRepository.findById(ad.car_id.id);
+    const car = await this.carsRepository.findById(ad.car_id);
 
     if (!car) {
       throw new AppError('Car not found');

@@ -1,5 +1,3 @@
-import 'reflect-metadata';
-
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
@@ -46,14 +44,14 @@ class UpdateVehicleItemsService {
       throw new AppError('Ad not found');
     }
 
-    const car = await this.carsRepository.findById(ad.car_id.id);
+    const car = await this.carsRepository.findById(ad.car_id);
 
     if(!car) {
       throw new AppError("ID for Car in Ad entity couldn't find any match")
     }
 
     console.log(car);
-    const items = await this.vehicleItemsRepository.findById(car.vehicle_item_id.id);
+    const items = await this.vehicleItemsRepository.findById(car.vehicle_item_id);
 
     if(!items) {
       throw new AppError("ID for Vehicle Item in Car entity couldn't find any match")

@@ -18,8 +18,7 @@ export default interface ICarsRepository {
     year_model,
   }: ICreateCarDTO): Promise<Car>;
   save(car: Car): Promise<Car>;
-  agreeToSubscribeData(confirm_import: boolean): Promise<boolean>;
   findById(id: string): Promise<Car | undefined>;
   findAll(): Promise<Car[]>;
-  findByAd(ad: Ad): Promise<Car>;
+  findByAd(ad: Ad): Promise<Car | undefined>;
 }

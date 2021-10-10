@@ -15,6 +15,8 @@ import ICarsRepository from '@modules/adverts/repositories/ICarsRepository';
 import CarsRepository from '@modules/adverts/infra/typeorm/repositories/CarsRepository';
 import IVehicleItemsRepository from '@modules/adverts/repositories/IVehicleItemsRepository';
 import VehicleItemsRepository from '@modules/adverts/infra/typeorm/repositories/VehicleItemsRepository';
+import ICarsImagesRepository from '@modules/adverts/repositories/ICarsImagesRpository';
+import CarsImagesRepository from '@modules/adverts/infra/typeorm/repositories/CarsImagesRepository';
 
 
 container.registerSingleton<IUsersRepository>(
@@ -40,6 +42,11 @@ container.registerSingleton<IAdsRepository>(
 container.registerSingleton<ICarsRepository>(
   'CarsRepository',
   CarsRepository,
+);
+
+container.registerSingleton<ICarsImagesRepository>(
+  'CarsImagesRepository',
+  CarsImagesRepository,
 );
 
 container.registerSingleton<IVehicleItemsRepository>(

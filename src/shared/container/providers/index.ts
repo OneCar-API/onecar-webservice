@@ -11,14 +11,11 @@ import HandlebarsMailTemplateProvider from './MailTemplateProvider/implementatio
 
 import IStorageProvider from './StorageProviders/models/IStorageProvider';
 import DiskStorageProvider from './StorageProviders/implementations/DiskStorageProvider';
-import S3StorageProvider from './StorageProviders/implementations/S3StorageProvider';
 
 
-container.registerInstance<IStorageProvider>(
+container.registerSingleton<IStorageProvider>(
   'StorageProvider',
-  uploadConfig.tmpFolder === 'disk'
-    ? container.resolve(DiskStorageProvider)
-    : container.resolve(S3StorageProvider),
+  DiskStorageProvider
 );
 
 container.registerSingleton<IMailTemplateProvider>(
