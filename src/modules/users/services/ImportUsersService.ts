@@ -233,8 +233,6 @@ class ImportUsersService {
   async execute(file: Express.Multer.File): Promise<IImportUsers[]> {
     const usersFile = await this.loadUsers(file);
 
-    console.log(usersFile)
-
     const users = await this.formatUsers(usersFile);
 
     users.map(async user => {

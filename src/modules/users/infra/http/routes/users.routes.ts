@@ -6,7 +6,7 @@ import UsersController from '../controllers/UsersController';
 import ensureAuthenticated from '@shared/infra/http/middlewares/ensureAuthenticated';
 import { celebrate, Joi, Segments } from 'celebrate';
 
-const upload = multer(uploadConfig);
+const upload = multer(uploadConfig.multer);
 
 const usersRouter = Router();
 
