@@ -127,8 +127,10 @@ class ImportAdsService {
     const createAdsService = container.resolve(CreateImportedAdService);
 
     adsFile.map(async ad => {
-      const { ad_code, manufacturer, brand, model, year_manufacture, year_model,
+      const { ad_code, manufacturer, brand, model: modelResponse, year_manufacture, year_model,
         document, cnpj, price, image } = ad;
+
+      const model = modelResponse;
 
       const user = await this.usersRepository.findById(userId);
 
@@ -136,7 +138,7 @@ class ImportAdsService {
         throw new AppError('User not found', 404);
       }
 
-      const importUser = await createAdsService.execute({
+      const importAds = await createAdsService.execute({
         ad_code,
         manufacturer,
         brand,
@@ -147,6 +149,19 @@ class ImportAdsService {
         ...(cnpj && { cnpj }),
         ...(price && { price }),
         user_id: user.id,
+      });
+
+      const fileName = `${importAds.id}-${model}`;
+
+      const uploadImages = await this.storageProvider.saveLink(
+        image,
+        'image',
+        fileName,
+      );
+
+      await this.carsImagesRepository.create({
+        car_id: importAds.car_id,
+        image: uploadImages,
       });
     });
 
