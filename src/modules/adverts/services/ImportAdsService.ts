@@ -155,7 +155,6 @@ class ImportAdsService {
 
       const uploadImages = await this.storageProvider.saveLink(
         image,
-        'image',
         fileName,
       );
 

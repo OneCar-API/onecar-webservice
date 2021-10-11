@@ -5,11 +5,8 @@ import uploadConfig from '@config/upload';
 import IStorageProvider from '../models/IStorageProvider';
 
 class DiskStorageProvider implements IStorageProvider {
-  public async saveLink(link: string, folder: string): Promise<string> {
-    await fs.promises.rename(
-      resolve(uploadConfig.tmpFolder, link),
-      resolve(`${uploadConfig.tmpFolder}/${folder}`, link),
-    );
+  public async saveLink(link: string): Promise<string> {
+    resolve(uploadConfig.tmpFolder, link);
 
     return link;
   }
