@@ -11,10 +11,9 @@ class FakeStorageProvider implements IStorageProvider {
 
   public async saveLink(
     link: string,
-    folder: string,
     fileName: string,
   ): Promise<string> {
-    this.storage.push(folder, link, fileName);
+    this.storage.push(link, fileName);
 
     return link;
   }
