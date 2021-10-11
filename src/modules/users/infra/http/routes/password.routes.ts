@@ -26,7 +26,6 @@ passwordRouter.post(
     },
 
     [Segments.BODY]: {
-      token: Joi.string().uuid().required(),
       password: Joi.string().min(6).required(),
       password_confirmation: Joi.string().required().valid(Joi.ref('password')),
     },
