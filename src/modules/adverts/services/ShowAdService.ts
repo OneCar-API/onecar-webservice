@@ -27,6 +27,15 @@ class ShowAdService {
       throw new AppError('Ad entity were not found', 404);
     }
 
+    if (ad.views == null) {
+      ad.views = 1
+    }
+    else {
+      ad.views += 1;
+    }
+
+    await this.adsRepository.save(ad);
+
     const carId = ad.car.id;
 
     const car = await this.carsRepository.findById(carId);
