@@ -32,7 +32,7 @@ class Ad {
   price: Number;
 
   @Column({nullable: true})
-  views: Number;
+  views: number;
 
   @Column({nullable: true})
   interests: Number;
