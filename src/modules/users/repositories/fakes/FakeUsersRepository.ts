@@ -138,6 +138,12 @@ class FakeUsersRepository implements IUsersRepository {
     return findUser;
   }
 
+  public async findByNickname(nickname: string): Promise<User | undefined> {
+    const findUser = this.users.find(user => user.nickname === nickname);
+
+    return findUser;
+  }
+
   public async findAll(
     offset?: number,
     limit?: number,

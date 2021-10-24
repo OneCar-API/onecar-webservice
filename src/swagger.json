@@ -1066,6 +1066,54 @@
           }
         }
       }
+    },
+
+    "/address": {
+      "post": {
+        "tags": ["Addresses"],
+        "summary": "Cadastrar endereços",
+        "description": "Essa rota permite o cadastro de um endereço",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "zip_code": "12220200",
+                  "neighborhood": "Queens",
+                  "city": "New York",
+                  "state": "NY"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
     }
   },
 

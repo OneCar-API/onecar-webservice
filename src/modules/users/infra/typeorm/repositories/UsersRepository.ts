@@ -140,6 +140,12 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
+  public async findByNickname(nickname: string): Promise<User | undefined> {
+    const user = await this.ormRepository.findOne({ where: { nickname } });
+
+    return user;
+  }
+
   public async findAll(
     offset?: number,
     limit?: number,
