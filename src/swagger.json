@@ -752,6 +752,31 @@
                           "created_at": {
                             "type": "number"
                           },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
                           "car": {
                             "type": "object",
                             "properties": {
@@ -1111,6 +1136,84 @@
           },
           "404": {
             "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/addresses": {
+      "get": {
+        "tags": ["Addresses"],
+        "summary": "Busca todos os endereços da plataforma",
+        "description": "Essa rota permite buscar todos os endereços da plataforma.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que limita a quantidade de resultados por página."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "number"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
           }
         }
       }

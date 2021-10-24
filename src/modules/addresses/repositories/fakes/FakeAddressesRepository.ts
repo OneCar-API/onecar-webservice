@@ -28,6 +28,26 @@ class FakeAddressesRepository implements IAddressesRepository {
 
     return address;
   }
+
+  public async findAll(
+    offset?: number,
+    limit?: number,
+  ): Promise<[Address[], number]> {
+    const findAddresses = this.addresses.filter(address => {
+      if (
+        (offset && offset === offset) ||
+        (limit && limit === limit)
+      ) {
+        return address;
+      }
+
+      return null;
+    });
+
+    const totalAddresses = findAddresses.length;
+
+    return [findAddresses, totalAddresses];
+  }
 }
 
 export default FakeAddressesRepository;

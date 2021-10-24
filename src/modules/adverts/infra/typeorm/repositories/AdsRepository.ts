@@ -126,6 +126,8 @@ class AdsRepository implements IAdsRepository {
         'carImages.id',
         'carImages.image',
         'carImages.car_id',
+        'user.id',
+        'user.name',
         'address.id',
         'address.city',
         'address.state',

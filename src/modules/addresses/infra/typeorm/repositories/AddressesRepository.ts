@@ -30,6 +30,31 @@ class AddressesRepository implements IAddressesRepository {
 
     return address;
   }
+
+  public async findAll(
+    offset?: number,
+    limit?: number,
+  ): Promise<[Address[], number]> {
+    const addressesQuery = this.ormRepository
+      .createQueryBuilder('address')
+      .leftJoinAndSelect('address.user', 'user')
+      .select([
+        'user.id',
+        'user.name',
+        'address.id',
+        'address.city',
+        'address.state',
+        'address.created_at',
+      ])
+      .skip(offset || (offset = 0))
+      .take(limit || (limit = 20))
+      .orderBy('address.created_at', 'DESC');
+
+
+    const [addresses, totalAddresses] = await addressesQuery.getManyAndCount();
+
+    return [addresses, totalAddresses];
+  }
 }
 
 export default AddressesRepository;

@@ -6,6 +6,6 @@ export default interface ICreateUserDTO {
   password: string;
   cnpj?: string;
   document: string;
-  is_legal: boolean;
-  is_active: boolean;
+  is_legal?: boolean;
+  is_active?: boolean;
 }

@@ -9,4 +9,8 @@ export default interface IAddressesRepository {
     city,
     state,
   }: ICreateAddressDTO): Promise<Address>;
+  findAll(
+    offset?: number,
+    limit?: number,
+  ): Promise<[Address[], number]>;
 }

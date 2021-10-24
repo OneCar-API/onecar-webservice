@@ -23,4 +23,14 @@ addressesRouter.post(
   addressesController.create,
 );
 
+addressesRouter.get('/addresses',
+  celebrate({
+    [Segments.QUERY]: {
+      offset: Joi.number().empty(''),
+      limit: Joi.number().empty(''),
+    },
+  }),
+  addressesController.index,
+);
+
 export default addressesRouter;
