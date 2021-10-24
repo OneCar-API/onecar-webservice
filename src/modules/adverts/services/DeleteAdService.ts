@@ -27,16 +27,16 @@ class DeleteAdService {
   public async execute(id: string, user_id: string): Promise<String> {
 
     const ad = await this.adsRepository.findById(id);
-
+    
     if(!ad) {
       throw new AppError('Ad entity were not found');
     }
 
-    if (ad.user_id.id != user_id) {
+    if (ad.user_id != user_id) {
       throw new AppError('Permission Denied. Only the Ad owner is allowed to delete an Ad');
     }
 
-    const carId = ad.car.id;
+    const carId = ad.car_id;
 
     const car = await this.carsRepository.findById(carId);
 
