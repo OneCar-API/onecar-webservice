@@ -13,4 +13,5 @@ export default interface IAddressesRepository {
     offset?: number,
     limit?: number,
   ): Promise<[Address[], number]>;
+  findById(id: string): Promise<Address | undefined>;
 }

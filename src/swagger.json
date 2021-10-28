@@ -1098,6 +1098,9 @@
         "tags": ["Addresses"],
         "summary": "Cadastrar endereços",
         "description": "Essa rota permite o cadastro de um endereço",
+        "security": [
+          { "bearerAuth": [] }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1191,7 +1194,7 @@
                             "type": "string"
                           },
                           "created_at": {
-                            "type": "number"
+                            "type": "timestamp with time zone"
                           },
                           "user": {
                             "type": "object",
@@ -1206,6 +1209,71 @@
                           }
                         }
                       ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          }
+        }
+      }
+    },
+
+    "/address/{addressId}": {
+      "get": {
+        "tags": ["Addresses"],
+        "summary": "Visualização do endereço do usuário",
+        "description": "Essa rota permite visualizar o endereço do usuário logado.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja visualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "uuid"
+                      },
+                      "zip_code": {
+                        "type": "string"
+                      },
+                      "neighborhood": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "uuid"
+                      },
+                      "created_at": {
+                        "type": "timestamp with time zone"
+                      },
+                      "updated_at": {
+                        "type": "timestamp with time zone"
+                      }
                     }
                   }
                 }

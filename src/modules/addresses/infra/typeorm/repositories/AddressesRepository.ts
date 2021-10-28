@@ -55,6 +55,16 @@ class AddressesRepository implements IAddressesRepository {
 
     return [addresses, totalAddresses];
   }
+
+  public async findById(
+    id: string
+  ): Promise<Address | undefined> {
+    const address = await this.ormRepository.findOne({
+      id,
+    });
+
+    return address;
+  }
 }
 
 export default AddressesRepository;

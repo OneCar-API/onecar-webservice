@@ -33,4 +33,14 @@ addressesRouter.get('/addresses',
   addressesController.index,
 );
 
+addressesRouter.get('/address/:address_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      address_id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  addressesController.show,
+);
+
 export default addressesRouter;

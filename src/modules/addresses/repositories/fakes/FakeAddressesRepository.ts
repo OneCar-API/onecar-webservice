@@ -48,6 +48,16 @@ class FakeAddressesRepository implements IAddressesRepository {
 
     return [findAddresses, totalAddresses];
   }
+
+  public async findById(
+    id: string
+  ): Promise<Address | undefined> {
+    const findAddress = this.addresses.find(
+      address => address.id === id
+    );
+
+    return findAddress;
+  }
 }
 
 export default FakeAddressesRepository;
