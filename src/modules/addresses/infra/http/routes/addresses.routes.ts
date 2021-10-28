@@ -43,4 +43,21 @@ addressesRouter.get('/address/:address_id',
   addressesController.show,
 );
 
+addressesRouter.put(
+  '/address/:address_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      address_id: Joi.string().uuid().required(),
+    },
+    [Segments.BODY]: {
+      zip_code: Joi.string().empty(null),
+      neighborhood: Joi.string().empty(null),
+      city: Joi.string().empty(null),
+      state: Joi.string().empty(null),
+    },
+  }),
+  ensureAuthenticated,
+  addressesController.update,
+);
+
 export default addressesRouter;

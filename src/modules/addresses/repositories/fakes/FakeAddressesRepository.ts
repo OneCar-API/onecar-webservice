@@ -4,6 +4,7 @@ import ICreateAddressDTO from '@modules/addresses/dtos/ICreateAddressDTO';
 import IAddressesRepository from '../IAddressesRepository';
 
 import Address from '../../infra/typeorm/entities/Address';
+import IUpdateAddressDTO from '@modules/addresses/dtos/IUpdateAddressDTO';
 
 class FakeAddressesRepository implements IAddressesRepository {
   addresses: Address[] = [];
@@ -57,6 +58,27 @@ class FakeAddressesRepository implements IAddressesRepository {
     );
 
     return findAddress;
+  }
+
+  public async update({
+    address_id,
+    zip_code,
+    neighborhood,
+    city,
+    state,
+  }: IUpdateAddressDTO): Promise<Address> {
+    const findAddress = this.addresses.find(address => address.id === address_id);
+
+    const updateAddress = Object.assign(findAddress, {
+      zip_code,
+      neighborhood,
+      city,
+      state,
+    });
+
+    this.addresses.push(updateAddress);
+
+    return updateAddress;
   }
 }
 

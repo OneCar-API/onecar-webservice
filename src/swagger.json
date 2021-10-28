@@ -1282,6 +1282,58 @@
           },
           "401": {
             "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      },
+
+      "put": {
+        "tags": ["Addresses"],
+        "summary": "Atualizar endereços",
+        "description": "Essa rota permite a atualização de um endereço",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "zip_code": "12220200",
+                  "neighborhood": "Queens",
+                  "city": "New York",
+                  "state": "NY"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found / Address not found"
           }
         }
       }

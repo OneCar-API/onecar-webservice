@@ -3,6 +3,7 @@ import { getRepository, Repository } from 'typeorm';
 import IAddressesRepository from '@modules/addresses/repositories/IAddressesRepository';
 import ICreateAddressDTO from '@modules/addresses/dtos/ICreateAddressDTO';
 import Address from '../entities/Address';
+import IUpdateAddressDTO from '@modules/addresses/dtos/IUpdateAddressDTO';
 
 class AddressesRepository implements IAddressesRepository {
   private ormRepository: Repository<Address>;
@@ -64,6 +65,27 @@ class AddressesRepository implements IAddressesRepository {
     });
 
     return address;
+  }
+
+  public async update({
+    address_id,
+    zip_code,
+    neighborhood,
+    city,
+    state,
+  }: IUpdateAddressDTO): Promise<Address> {
+    const findAddress = await this.ormRepository.findOne({ id: address_id });
+
+    const updateAddress = Object.assign(findAddress, {
+      zip_code,
+      neighborhood,
+      city,
+      state,
+    });
+
+    await this.ormRepository.save(updateAddress);
+
+    return updateAddress;
   }
 }
 
