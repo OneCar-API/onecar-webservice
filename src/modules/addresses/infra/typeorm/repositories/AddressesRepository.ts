@@ -87,6 +87,10 @@ class AddressesRepository implements IAddressesRepository {
 
     return updateAddress;
   }
+
+  public async deleteById(id: string): Promise<void> {
+    await this.ormRepository.delete(id);
+  }
 }
 
 export default AddressesRepository;

@@ -1296,6 +1296,17 @@
         "security": [
           { "bearerAuth": [] }
         ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja atualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -1331,6 +1342,37 @@
           },
           "401": {
             "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Addresses"],
+        "summary": "Exclusão do endereço do usuário",
+        "description": "Essa rota permite excluir o endereço do usuário logado.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja excluir",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The address has been successfully removed"
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
           },
           "404": {
             "description": "User not found / Address not found"

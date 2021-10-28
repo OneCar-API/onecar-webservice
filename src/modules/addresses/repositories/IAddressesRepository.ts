@@ -22,4 +22,5 @@ export default interface IAddressesRepository {
     city,
     state,
   }: IUpdateAddressDTO): Promise<Address>;
+  deleteById(id: string): Promise<void>;
 }

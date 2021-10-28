@@ -5,6 +5,7 @@ import CreateAddressService from '@modules/addresses/services/CreateAddressServi
 import ListAddressesService from '@modules/addresses/services/ListAddressesService';
 import ShowAddressService from '@modules/addresses/services/ShowAddressService';
 import UpdateAddressService from '@modules/addresses/services/UpdateAddressService';
+import DeleteAddressService from '@modules/addresses/services/DeleteAddressService';
 
 export default class AddressesController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -53,7 +54,10 @@ export default class AddressesController {
 
     const showAddress = container.resolve(ShowAddressService);
 
-    const addresses = await showAddress.execute(user_id, address_id);
+    const addresses = await showAddress.execute({
+      user_id,
+      address_id,
+    });
 
     return response.json(addresses);
   }
@@ -82,5 +86,22 @@ export default class AddressesController {
     });
 
     return response.json(address);
+  }
+
+  public async delete(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+
+    const { address_id } = request.params;
+
+    const deleteAddresses = container.resolve(DeleteAddressService);
+
+    await deleteAddresses.execute({
+      user_id,
+      address_id,
+    });
+
+    return response.json({
+      message: 'The address has been successfully removed!',
+    });
   }
 }

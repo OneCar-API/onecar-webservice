@@ -80,6 +80,14 @@ class FakeAddressesRepository implements IAddressesRepository {
 
     return updateAddress;
   }
+
+  public async deleteById(id: string): Promise<void> {
+    const address = new Address();
+
+    this.addresses.find(ut => ut.id === id);
+
+    this.addresses.splice(this.addresses.indexOf(address));
+  }
 }
 
 export default FakeAddressesRepository;

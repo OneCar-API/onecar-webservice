@@ -1,9 +1,8 @@
 import { injectable, inject } from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
-import IAddressesRepository from '../repositories/IAddressesRepository';
 
-import Address from '../infra/typeorm/entities/Address';
+import IAddressesRepository from '../repositories/IAddressesRepository';
 import IUsersRepository from '@modules/users/repositories/IUsersRepository';
 
 interface IRequest {
@@ -12,7 +11,7 @@ interface IRequest {
 }
 
 @injectable()
-class ShowAddressService {
+class DeleteAddressService {
   constructor(
     @inject('AddressesRepository')
     private addressesRepository: IAddressesRepository,
@@ -21,7 +20,10 @@ class ShowAddressService {
     private usersRepository: IUsersRepository,
   ) {}
 
-  public async execute({ user_id, address_id }: IRequest): Promise<Address> {
+  public async execute({
+    user_id,
+    address_id,
+  }: IRequest): Promise<void> {
     const user = await this.usersRepository.findById(user_id);
 
     if (!user) {
@@ -31,11 +33,11 @@ class ShowAddressService {
     const address = await this.addressesRepository.findById(address_id);
 
     if (!address) {
-      throw new AppError('Address not found', 404);
+      throw new AppError('Address not found.', 404);
     }
 
-    return address;
+    await this.addressesRepository.deleteById(address.id);
   }
 }
 
-export default ShowAddressService;
+export default DeleteAddressService;

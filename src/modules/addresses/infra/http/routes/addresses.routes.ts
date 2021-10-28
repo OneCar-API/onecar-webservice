@@ -60,4 +60,15 @@ addressesRouter.put(
   addressesController.update,
 );
 
+addressesRouter.delete(
+  '/address/:address_id',
+  celebrate({
+    [Segments.PARAMS]: {
+      address_id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  addressesController.delete,
+);
+
 export default addressesRouter;
