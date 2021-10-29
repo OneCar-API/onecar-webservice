@@ -10,4 +10,5 @@ export default interface IImportAdsDTO {
   price?: string;
   user_id?: string;
   image: string;
+  doors?: Number;
 }

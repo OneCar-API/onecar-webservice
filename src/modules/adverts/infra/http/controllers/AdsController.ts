@@ -116,8 +116,9 @@ export default class AdsController {
     const requestBody = request.body;
 
     requestBody.ad_id = request.params.id;
+    const userId = request.user.id;
 
-    const updatedAd = await updateService.execute(requestBody);
+    const updatedAd = await updateService.execute(requestBody, userId);
 
     return response
       .status(200)

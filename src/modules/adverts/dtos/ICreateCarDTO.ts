@@ -9,4 +9,5 @@ export default interface ICreateCarDTO {
   gearbox_type?: string;
   km?: Number;
   color?: string;
+  doors?: Number;
 }
