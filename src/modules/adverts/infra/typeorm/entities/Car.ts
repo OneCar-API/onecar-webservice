@@ -44,6 +44,9 @@ class Car {
   km: Number;
 
   @Column({nullable: true})
+  doors: Number;
+
+  @Column({nullable: true})
   color: string;
 
   @OneToOne(() => VehicleItem, vehicleItem => vehicleItem.car)

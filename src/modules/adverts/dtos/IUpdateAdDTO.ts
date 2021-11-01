@@ -12,4 +12,5 @@ export default interface IUpdateAdDTO {
   km?: Number;
   color?: string;
   vehicle_price?: Number;
+  doors?: Number;
 }

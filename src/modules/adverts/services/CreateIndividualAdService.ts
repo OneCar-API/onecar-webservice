@@ -47,6 +47,7 @@ class CreateImportedAdService {
     gearbox_type,
     km,
     color,
+    doors
   }: ICreateIndividualAdDTO): Promise<Ad> {
 
     if(!user_id) {
@@ -71,6 +72,7 @@ class CreateImportedAdService {
       gearbox_type,
       km,
       color,
+      doors,
       vehicle_item_id: vehicleItemsEntity.id,
     });
 

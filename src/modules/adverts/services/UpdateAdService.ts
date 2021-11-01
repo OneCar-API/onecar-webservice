@@ -7,7 +7,6 @@ import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import Ad from '../../adverts/infra/typeorm/entities/Ad';
 import UpdateAdDTO from '../dtos/IUpdateAdDTO';
-import { request } from 'express';
 
 
 @injectable()
@@ -36,17 +35,18 @@ class UpdateAdService {
     gearbox_type,
     km,
     color,
+    doors,
     vehicle_price,
-  }: UpdateAdDTO): Promise<Ad> {
+  }: UpdateAdDTO, userId: string): Promise<Ad> {
     const ad = await this.adsRepository.findById(ad_id);
 
     if (!ad) {
       throw new AppError('Ad not found');
     }
 
-    const requestUserId = request.user.id;
+    console.log(ad + userId);
 
-    if (ad.user_id != requestUserId) {
+    if (ad.user_id != userId) {
       throw new AppError('Permission denied');
     }
 
@@ -56,7 +56,9 @@ class UpdateAdService {
       throw new AppError('Car not found');
     }
 
-    ad.price = Number(vehicle_price);
+    console.log("VEHICLLE_PRICE" + vehicle_price);
+
+    ad.price = vehicle_price ? Number(vehicle_price) : new Number();
     ad.title = title ? title : "";
     ad.description = description ? description : "";
 
@@ -69,8 +71,10 @@ class UpdateAdService {
     car.gearbox_type = gearbox_type ? gearbox_type : "";
     car.km = km ? km : new Number();
     car.color = color ? color : "";
+    car.doors = doors ? doors : new Number();
 
     await this.carsRepository.save(car);
+    console.log("")
     const newAd = await this.adsRepository.save(ad);
 
     return newAd;

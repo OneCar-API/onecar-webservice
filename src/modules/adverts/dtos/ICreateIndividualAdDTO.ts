@@ -13,4 +13,5 @@ export default interface ICreateIndividualAdDTO {
   gearbox_type?: string;
   km?: Number;
   color?: string;
+  doors?: Number;
 }

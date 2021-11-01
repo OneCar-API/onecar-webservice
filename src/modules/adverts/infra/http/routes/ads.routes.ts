@@ -51,17 +51,21 @@ adsRouter.put(
   '/:id',
   celebrate({
     [Segments.PARAMS]: {
-      ad_id: Joi.string().uuid().required(),
+      id: Joi.string().uuid().required(),
     },
     [Segments.BODY]: {
+      title: Joi.string().empty(''),
+      description: Joi.string().empty(''),
+      fuel: Joi.string().empty(''),
       manufacturer: Joi.string().empty(''),
       brand: Joi.string().empty(''),
       model: Joi.string().empty(''),
       year_manufacture: Joi.string().empty(''),
       year_model: Joi.string().empty(''),
       vehicle_item_id: Joi.string().uuid().empty(''),
-      ad_cod: Joi.string().empty(''),
       vehicle_price: Joi.string().empty(''),
+      doors: Joi.number(),
+      km: Joi.number(),
     },
   }),
   ensureAuthenticated,
