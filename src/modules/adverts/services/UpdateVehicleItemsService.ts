@@ -50,7 +50,6 @@ class UpdateVehicleItemsService {
       throw new AppError("ID for Car in Ad entity couldn't find any match")
     }
 
-    console.log(car);
     const items = await this.vehicleItemsRepository.findById(car.vehicle_item_id);
 
     if(!items) {
