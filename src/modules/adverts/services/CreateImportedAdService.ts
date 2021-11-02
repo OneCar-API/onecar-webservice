@@ -71,6 +71,9 @@ class CreateImportedAdService {
       car_id: car.id,
     });
 
+    car.vehicleItem = vehicleItemsEntity;
+    ad.car = car;
+
     return ad;
   }
 }

@@ -44,8 +44,6 @@ class UpdateAdService {
       throw new AppError('Ad not found');
     }
 
-    console.log(ad + userId);
-
     if (ad.user_id != userId) {
       throw new AppError('Permission denied');
     }
@@ -55,8 +53,6 @@ class UpdateAdService {
     if (!car) {
       throw new AppError('Car not found');
     }
-
-    console.log("VEHICLLE_PRICE" + vehicle_price);
 
     ad.price = vehicle_price ? Number(vehicle_price) : new Number();
     ad.title = title ? title : "";
@@ -74,9 +70,9 @@ class UpdateAdService {
     car.doors = doors ? doors : new Number();
 
     await this.carsRepository.save(car);
-    console.log("")
     const newAd = await this.adsRepository.save(ad);
 
+    newAd.car = car;
     return newAd;
   }
 }
