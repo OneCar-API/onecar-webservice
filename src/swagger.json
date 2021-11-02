@@ -752,6 +752,31 @@
                           "created_at": {
                             "type": "number"
                           },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
                           "car": {
                             "type": "object",
                             "properties": {
@@ -1063,6 +1088,294 @@
           },
           "404": {
             "description": "User not found / Car not found"
+          }
+        }
+      }
+    },
+
+    "/address": {
+      "post": {
+        "tags": ["Addresses"],
+        "summary": "Cadastrar endereços",
+        "description": "Essa rota permite o cadastro de um endereço",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "zip_code": "12220200",
+                  "neighborhood": "Queens",
+                  "city": "New York",
+                  "state": "NY"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/addresses": {
+      "get": {
+        "tags": ["Addresses"],
+        "summary": "Busca todos os endereços da plataforma",
+        "description": "Essa rota permite buscar todos os endereços da plataforma.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que limita a quantidade de resultados por página."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "timestamp with time zone"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          }
+        }
+      }
+    },
+
+    "/address/{addressId}": {
+      "get": {
+        "tags": ["Addresses"],
+        "summary": "Visualização do endereço do usuário",
+        "description": "Essa rota permite visualizar o endereço do usuário logado.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja visualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "uuid"
+                      },
+                      "zip_code": {
+                        "type": "string"
+                      },
+                      "neighborhood": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "uuid"
+                      },
+                      "created_at": {
+                        "type": "timestamp with time zone"
+                      },
+                      "updated_at": {
+                        "type": "timestamp with time zone"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      },
+
+      "put": {
+        "tags": ["Addresses"],
+        "summary": "Atualizar endereços",
+        "description": "Essa rota permite a atualização de um endereço",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja atualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "zip_code": "12220200",
+                  "neighborhood": "Queens",
+                  "city": "New York",
+                  "state": "NY"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Addresses"],
+        "summary": "Exclusão do endereço do usuário",
+        "description": "Essa rota permite excluir o endereço do usuário logado.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja excluir",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The address has been successfully removed"
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found / Address not found"
           }
         }
       }

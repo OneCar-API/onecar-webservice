@@ -52,7 +52,37 @@ class CreateUserService {
       throw new AppError('Email address already in use.', 401);
     }
 
+    const checkNicknameExists = await this.usersRepository.findByNickname(nickname);
+
+    if (checkNicknameExists) {
+      throw new AppError('Nickname already in use.', 401);
+    }
+
     const hashedPassword = await this.hashProvider.generateHash(password);
+
+    if (phone) {
+      const isNumber = phone.match(/^\d+$/) !== null;
+
+      if (!isNumber) {
+        throw new AppError('Phone formatting is wrong.', 401);
+      }
+    }
+
+    if (document) {
+      const isNumber = document.match(/^\d+$/) !== null;
+
+      if (!isNumber) {
+        throw new AppError('Document formatting is wrong.', 401);
+      }
+    }
+
+    if (cnpj) {
+      const isNumber = cnpj.match(/^\d+$/) !== null;
+
+      if (!isNumber) {
+        throw new AppError('CNPJ formatting is wrong.', 401);
+      }
+    }
 
     const user = await this.usersRepository.create({
       name,

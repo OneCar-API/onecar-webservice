@@ -54,13 +54,78 @@ describe('CreateUser', () => {
     await expect(
       createUser.execute({
         name: 'John Doe',
-        nickname: 'john.doe',
+        nickname: 'johndoe',
         password: '123456',
         email: 'johndoe@example.com',
         phone: '12987906565',
         document: '22287634090',
         cnpj: '42800967000134',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
 
+  it('should not be able to create a new user with same nickname from another user', async () => {
+    await createUser.execute({
+      name: 'John Doe',
+      nickname: 'john.doe',
+      password: '123456',
+      email: 'johndoe@example.com',
+      phone: '12987906565',
+      document: '22287634090',
+      cnpj: '42800967000134',
+    });
+
+    await expect(
+      createUser.execute({
+        name: 'John Doe',
+        nickname: 'john.doe',
+        password: '123456',
+        email: 'johndoe2@example.com',
+        phone: '12987906565',
+        document: '22287634090',
+        cnpj: '42800967000134',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an address with incorrect phone formatting', async () => {
+    await expect(
+      createUser.execute({
+        name: 'John Doe',
+        nickname: 'john.doe',
+        password: '123456',
+        email: 'johndoe@example.com',
+        phone: '(12)98790-6565',
+        document: '22287634090',
+        cnpj: '42800967000134',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an address with incorrect document formatting', async () => {
+    await expect(
+      createUser.execute({
+        name: 'John Doe',
+        nickname: 'john.doe',
+        password: '123456',
+        email: 'johndoe@example.com',
+        phone: '12987906565',
+        document: '222.876.340/90',
+        cnpj: '42800967000134',
+      }),
+    ).rejects.toBeInstanceOf(AppError);
+  });
+
+  it('should not be able to create an address with incorrect CNPJ formatting', async () => {
+    await expect(
+      createUser.execute({
+        name: 'John Doe',
+        nickname: 'john.doe',
+        password: '123456',
+        email: 'johndoe@example.com',
+        phone: '12987906565',
+        document: '22287634090',
+        cnpj: '42.800.967/0001-34',
       }),
     ).rejects.toBeInstanceOf(AppError);
   });

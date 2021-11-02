@@ -4,6 +4,7 @@ import ICreateAddressDTO from '@modules/addresses/dtos/ICreateAddressDTO';
 import IAddressesRepository from '../IAddressesRepository';
 
 import Address from '../../infra/typeorm/entities/Address';
+import IUpdateAddressDTO from '@modules/addresses/dtos/IUpdateAddressDTO';
 
 class FakeAddressesRepository implements IAddressesRepository {
   addresses: Address[] = [];
@@ -27,6 +28,65 @@ class FakeAddressesRepository implements IAddressesRepository {
     this.addresses.push(address);
 
     return address;
+  }
+
+  public async findAll(
+    offset?: number,
+    limit?: number,
+  ): Promise<[Address[], number]> {
+    const findAddresses = this.addresses.filter(address => {
+      if (
+        (offset && offset === offset) ||
+        (limit && limit === limit)
+      ) {
+        return address;
+      }
+
+      return null;
+    });
+
+    const totalAddresses = findAddresses.length;
+
+    return [findAddresses, totalAddresses];
+  }
+
+  public async findById(
+    id: string
+  ): Promise<Address | undefined> {
+    const findAddress = this.addresses.find(
+      address => address.id === id
+    );
+
+    return findAddress;
+  }
+
+  public async update({
+    address_id,
+    zip_code,
+    neighborhood,
+    city,
+    state,
+  }: IUpdateAddressDTO): Promise<Address> {
+    const findAddress = this.addresses.find(address => address.id === address_id);
+
+    const updateAddress = Object.assign(findAddress, {
+      zip_code,
+      neighborhood,
+      city,
+      state,
+    });
+
+    this.addresses.push(updateAddress);
+
+    return updateAddress;
+  }
+
+  public async deleteById(id: string): Promise<void> {
+    const address = new Address();
+
+    this.addresses.find(ut => ut.id === id);
+
+    this.addresses.splice(this.addresses.indexOf(address));
   }
 }
 
