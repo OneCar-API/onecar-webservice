@@ -108,7 +108,7 @@ adsRouter.get(
   adsController.index,
 );
 
-adsRouter.patch(
+adsRouter.post(
   '/:ad_id/car/:car_id/car-image',
   celebrate({
     [Segments.PARAMS]: {

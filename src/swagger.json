@@ -1034,7 +1034,7 @@
     },
 
     "/ads/{adsId}/car/{carId}/car-image": {
-      "patch": {
+      "post": {
         "tags": ["Cars Images"],
         "summary": "Adição de uma foto do carro ao anúncio",
         "description": "Essa rota permite a adição de uma nova foto do carro ao anúncio",
