@@ -1,4 +1,4 @@
-import { createConnection, getConnectionOptions } from 'typeorm';
+import { createConnections, getConnectionOptions } from 'typeorm';
 interface IOptions {
   host: string;
 }
@@ -6,9 +6,10 @@ interface IOptions {
 getConnectionOptions().then(options => {
   const newOptions = options as IOptions;
   newOptions.host = 'database_onecar';
-  createConnection({
+  createConnections([{
     ...options,
-  }).catch(err => {
+
+  }]).catch(err => {
     console.log(err)
   })
 });
