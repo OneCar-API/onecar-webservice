@@ -36,10 +36,10 @@ services:
       - .:/usr/app
     links:
       - database_onecar
+      - mongo_onecar
     depends_on:
       - database_onecar
-
-
+      - mongo_onecar
 
 volumes:
   pgdata:
