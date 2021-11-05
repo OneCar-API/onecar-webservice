@@ -8,7 +8,7 @@ class MessagesRepository implements IMessagesRepository {
   private ormRepository: MongoRepository<Message>;
 
   constructor() {
-    this.ormRepository = getMongoRepository(Message, 'mongo');
+    this.ormRepository = getMongoRepository(Message, 'mongo_onecar');
   }
 
   public async create({

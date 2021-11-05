@@ -1,9 +1,7 @@
 import { Router } from 'express';
-import multer from 'multer';
-
-import uploadConfig from '@config/upload';
-import MessagesController from '../controllers/MessagesController';
 import { celebrate, Joi, Segments } from 'celebrate';
+
+import MessagesController from '../controllers/MessagesController';
 
 const messagesRouter = Router();
 
