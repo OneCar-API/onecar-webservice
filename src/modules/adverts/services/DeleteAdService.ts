@@ -32,29 +32,12 @@ class DeleteAdService {
       throw new AppError('Ad entity were not found');
     }
 
-    if (ad.user_id.id != user_id) {
+    if (ad.user_id != user_id) {
       throw new AppError('Permission Denied. Only the Ad owner is allowed to delete an Ad');
     }
 
-    const carId = ad.car.id;
-
-    const car = await this.carsRepository.findById(carId);
-
-    if(!car) {
-      throw new AppError('Car entity were not found');
-    }
-
-    const itemsId = car.vehicle_item_id;
-
-    const items = await this.vehicleItemsRepository.findById(itemsId);
-
-    if(!items) {
-      throw new AppError('Item were not found');
-    }
-
     await this.adsRepository.delete(ad.id);
-    await this.carsRepository.delete(car.id);
-    await this.vehicleItemsRepository.delete(items.id);
+
 
     return "Ad deleted";
   }
