@@ -9,7 +9,6 @@ import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import User from '../infra/typeorm/entities/User';
 import IUsersTokensRepository from '../repositories/IUsersTokensRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
-import IEncryptionProvider from '@shared/container/providers/EncryptionProvider/models/IEncryptionProvider';
 
 interface IRequest {
   name: string;
@@ -36,9 +35,6 @@ class CreateUserService {
 
     @inject('MailProvider')
     private mailProvider: IMailProvider,
-
-    @inject('EncryptionProvider')
-    private encryptionProvider: IEncryptionProvider,
   ) {}
 
   public async execute({
@@ -88,48 +84,41 @@ class CreateUserService {
       }
     }
 
-    const encryptName = await this.encryptionProvider.encrypt(name);
-    const encryptNickname = await this.encryptionProvider.encrypt(nickname);
-    const encryptDocument = await this.encryptionProvider.encrypt(document);
-    const encryptCNPJ = await this.encryptionProvider.encrypt(cnpj);
-    const encryptEmail = await this.encryptionProvider.encrypt(email);
-    const encryptPhone = await this.encryptionProvider.encrypt(phone);
-
     const user = await this.usersRepository.create({
-      name: encryptName,
-      nickname: encryptNickname,
-      document: encryptDocument,
-      cnpj: encryptCNPJ,
-      email: encryptEmail,
+      name,
+      nickname,
+      document,
+      cnpj,
+      email,
       password: hashedPassword,
-      phone: encryptPhone,
+      phone,
       is_legal: cnpj ? true : false,
       is_active: false,
     });
 
     const { token } = await this.usersTokensRepository.generate(user.id);
 
-    const confirmUser = path.resolve(
-      __dirname,
-      '..',
-      'views',
-      'confirm_user.hbs',
-    );
+      const confirmUser = path.resolve(
+        __dirname,
+        '..',
+        'views',
+        'confirm_user.hbs',
+      );
 
-    await this.mailProvider.sendMail({
-      to: {
-        name: name,
-        email: email,
-      },
-      subject: '[OneCar] Confirmação de Cadastro',
-      templateData: {
-        file: confirmUser,
-        variables: {
-          name: name,
-          link: `${process.env.APP_WEB_URL}/confirm-user?token=${token}`,
+      await this.mailProvider.sendMail({
+        to: {
+          name: user.name,
+          email: user.email,
         },
-      },
-    });
+        subject: '[OneCar] Confirmação de Cadastro',
+        templateData: {
+          file: confirmUser,
+          variables: {
+            name: user.name,
+            link: `${process.env.APP_WEB_URL}/confirm-user?token=${token}`,
+          },
+        },
+      });
 
     return user;
   }
