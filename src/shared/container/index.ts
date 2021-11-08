@@ -17,9 +17,6 @@ import IVehicleItemsRepository from '@modules/adverts/repositories/IVehicleItems
 import VehicleItemsRepository from '@modules/adverts/infra/typeorm/repositories/VehicleItemsRepository';
 import ICarsImagesRepository from '@modules/adverts/repositories/ICarsImagesRpository';
 import CarsImagesRepository from '@modules/adverts/infra/typeorm/repositories/CarsImagesRepository';
-import IMessagesRepository from '@modules/chat/repositories/IMessagesRepository';
-import MessagesRepository from '@modules/chat/infra/typeorm/repositories/MessagesRepository';
-
 
 container.registerSingleton<IUsersRepository>(
   'UsersRepository',
@@ -56,7 +53,3 @@ container.registerSingleton<IVehicleItemsRepository>(
   VehicleItemsRepository,
 );
 
-container.registerSingleton<IMessagesRepository>(
-  'MessagesRepository',
-  MessagesRepository,
-);
