@@ -1,19 +1,31 @@
-
-{
-  "type": "postgres",
-  "port": 5432,
-  "host": "localhost",
-  "username": "",
-  "password": "",
-  "database": "onecar",
-  "entities": [
-    "./src/modules/**/infra/typeorm/entities/*.ts"
-  ],
-  "migrations": [
-    "./src/shared/infra/typeorm/migrations/*.ts"
-  ],
-  "cli": {
-    "migrationsDir": "./src/shared/infra/typeorm/migrations"
+[
+  {
+    "name": "default",
+    "type": "postgres",
+    "port": 5432,
+    "host": "localhost",
+    "username": "",
+    "password": "",
+    "database": "onecar",
+    "entities": [
+      "./src/modules/**/infra/typeorm/entities/*.ts"
+    ],
+    "migrations": [
+      "./src/shared/infra/typeorm/migrations/*.ts"
+    ],
+    "cli": {
+      "migrationsDir": "./src/shared/infra/typeorm/migrations"
+    }
+  },
+  {
+    "name": "mongo",
+    "type": "mongodb",
+    "port": 27017,
+    "host": "localhost",
+    "database": "onecar",
+    "useUnefiedTopology": true,
+    "entities": [
+      "./src/modules/**/infra/typeorm/schemas/*.ts"
+    ]
   }
-}
-
+]
