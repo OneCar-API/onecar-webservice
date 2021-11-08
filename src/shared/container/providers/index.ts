@@ -11,6 +11,8 @@ import HandlebarsMailTemplateProvider from './MailTemplateProvider/implementatio
 
 import IStorageProvider from './StorageProviders/models/IStorageProvider';
 import DiskStorageProvider from './StorageProviders/implementations/DiskStorageProvider';
+import IEncryptionProvider from './EncryptionProvider/models/IEncryptionProvider';
+import AESEncryptionProvider from './EncryptionProvider/implementations/AESEncryptionProvider';
 
 
 container.registerSingleton<IStorageProvider>(
@@ -28,5 +30,10 @@ container.registerInstance<IMailProvider>(
   mailConfig.driver === 'ethereal'
     ? container.resolve(EtherealMailProvider)
     : container.resolve(SESMailProvider),
+);
+
+container.registerSingleton<IEncryptionProvider>(
+  'EncryptionProvider',
+  AESEncryptionProvider,
 );
 
