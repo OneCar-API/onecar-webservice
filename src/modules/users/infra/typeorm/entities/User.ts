@@ -7,36 +7,82 @@ import {
   OneToOne,
   OneToMany,
 } from 'typeorm';
-
+import { EncryptionTransformer } from 'typeorm-encrypted';
 import { Exclude } from 'class-transformer';
+
+import 'dotenv/config';
+
 import Address from '../../../../addresses/infra/typeorm/entities/Address';
 import Ad from '../../../../adverts/infra/typeorm/entities/Ad';
+
 
 @Entity('users')
 class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   name: string;
 
-  @Column()
+  @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   nickname: string;
 
-  @Column()
+  @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   email: string;
 
   @Column()
   @Exclude()
   password: string;
 
-  @Column()
+  @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   phone: string;
 
-  @Column()
+  @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   document: string;
 
-  @Column()
+  @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   cnpj: string;
 
   @Column()
