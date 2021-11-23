@@ -7,6 +7,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { EncryptionTransformer } from 'typeorm-encrypted';
 
 import User from '../../../../users/infra/typeorm/entities/User';
 
@@ -15,16 +16,44 @@ class Address {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+   @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   zip_code: string;
 
-  @Column()
+   @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   neighborhood: string;
 
-  @Column()
+   @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   city: string;
 
-  @Column()
+   @Column({
+    transformer: new EncryptionTransformer({
+      key: `${process.env.AES_KEY}`,
+      algorithm: 'aes-256-cbc',
+      ivLength: 16,
+      iv: `${process.env.AES_IV}`
+    })
+  })
   state: string;
 
   @OneToOne(() => User, user => user.address)
