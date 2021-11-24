@@ -1,0 +1,1506 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "OneCar Documentation",
+    "description": "Olá, essa é a documentação da API do OneCar. \n\n A API segue o padrão REST e todas suas respostas são em JSON. \n\n Quanto à autenticação, os serviços utilizam o seguinte método de validação: \n\n - Autenticação com token para a segurança. O usuário e senha devem ser de um usuário ativo na plataforma. \n\n Essa API usa como retorno os códigos HTTP padrões para indicar tanto o sucesso de uma requisição, quanto para indicar falha. Segue abaixo os principais: \n\n 1. 200 - Success \n\n 2. 401 - JWT token is missing / Invalid JWT token. Podem ainda ocorrer outros erros de validação ligados às regras de negócio e nestes casos serão tratados com o retorno do código de erro equivalente e uma mensagem explicativa (os respectivos códigos e mensagens estão listados no retorno de cada endpoint)",
+    "version": "1.0.0",
+    "contact": {
+      "email": "contato@onecar.com.br"
+    }
+  },
+  "paths": {
+    "/user": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Cadastrar usuários",
+        "description": "Essa rota permite o cadastro de um usuário",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "nickname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "document": {
+                    "type": "string"
+                  },
+                  "cnpj": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "John Doe",
+                  "nickname": "john.doe",
+                  "email": "johndoe@example.com",
+                  "password": "123456",
+                  "phone": "12988786060",
+                  "document": "90089747890",
+                  "cnpj": "23987679000123"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Email address already in use"
+          }
+        }
+      }
+    },
+
+    "/users/import": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Importar usuários",
+        "description": "Essa rota permite a importação de um arquivo CSV contendo as informações dos usuários",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file-users": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your file has been imported",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "message": {
+                        "type": "string"
+                      },
+                      "usersFailed": [
+                        {
+                          "name": {
+                            "type": "string"
+                          },
+                          "nickname": {
+                            "type": "string"
+                          },
+                          "document": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "address": {
+                            "zip_code": {
+                              "type": "string"
+                            },
+                            "neighborhood": {
+                              "type": "string"
+                            },
+                            "city": {
+                              "type": "string"
+                            },
+                            "state": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/users": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Busca todos os usuários da plataforma",
+        "description": "Essa rota permite buscar todos os usuários da plataforma.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelo nome, e-mail e telefone do usuário."
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pela cidade e estado do usuário."
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que limita a quantidade de resultados por página."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      },
+                      "previous": {
+                        "type": "boolean"
+                      },
+                      "next": {
+                        "type": "boolean"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "number"
+                          },
+                          "address": {
+                            "id": {
+                              "type": "uuid"
+                            },
+                            "city": {
+                              "type": "string"
+                            },
+                            "state": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          }
+        }
+      }
+    },
+
+    "/user/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Busca um usuário através do ID",
+        "description": "Essa rota permite buscar apenas um usuário por vez. O ID deve estar contido no parâmetro da URL.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário que deseja buscar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "uuid"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "nickname": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": "string"
+                      },
+                      "document": {
+                        "type": "string"
+                      },
+                      "cnpj": {
+                        "type": "string"
+                      },
+                      "is_legal": {
+                        "type": "boolean"
+                      },
+                      "is_active": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "number"
+                      },
+                      "updated_at": {
+                        "type": "number"
+                      },
+                      "address": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "zip_code": {
+                            "type": "string"
+                          },
+                          "neighborhood": {
+                            "type": "string"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/user/confirm": {
+      "patch": {
+        "tags": ["Confirm Users"],
+        "summary": "Confirmação do cadastro do usuário através do token",
+        "description": "Após confirmação do cadastro, o campo active do usuário mudará para true, indicando que agora ele é um usuário ativo.",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "token": "5a3df27f-833b-4fb6-8601-74564ceb9cc7"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your account was successfully confirmed"
+          },
+          "401": {
+            "description": "Token expired"
+          },
+          "404": {
+            "description": "User does not exists / User token does not exists"
+          }
+        }
+      }
+    },
+
+    "/user/confirm/update-token": {
+      "put": {
+        "tags": ["Confirm Users"],
+        "summary": "Atualização da data de expiração do token",
+        "description": "Caso o token do usuário expire, essa rota deve ser chamada para que a data seja atualizada e um novo e-mail de confirmação de cadastro seja enviado ao cliente.",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "id": "5a3df27f-833b-4fb6-8601-74564ceb9cc7"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "New e-mail confirmation was sent"
+          },
+          "404": {
+            "description": "User does not exists / User token does not exists"
+          }
+        }
+      }
+    },
+
+    "/password/forgot": {
+      "post": {
+        "tags": ["Forgot Password"],
+        "summary": "Envio de e-mail de recuperação de senha",
+        "description": "O e-mail enviado ao usuário contará com um link de recuperação de senha, que conterá um token para que seja autorizado a recuperar sua senha.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johndoe@example.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Sent a email to reset password"
+          },
+          "404": {
+            "description": "User does not exist"
+          }
+        }
+      }
+    },
+
+    "/password/reset": {
+      "post": {
+        "tags": ["Reset Password"],
+        "summary": "Reset da senha através do link de recuperação de senha",
+        "description": "Apenas usuários vindos através deste link que terão acesso à página para resetar senha.",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "token": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "password_confirmation": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "token": "5a3df27f-833b-4fb6-8601-74564ceb9cc7",
+                  "password": "567890",
+                  "password_confirmation": "567890"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your password was changed successfully"
+          },
+          "401": {
+            "description": "Token expired"
+          },
+          "404": {
+            "description": "User does not exists / User token does not exists"
+          }
+        }
+      }
+    },
+
+    "/sessions": {
+      "post": {
+        "tags": ["Sessions"],
+        "summary": "Autenticação do usuário",
+        "description": "Essa rota permite o login do usuário, fornecendo o token de autenticação",
+        "security": {
+          "Bearer": []
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "email": "johndoe@example.com",
+                  "password": "123456"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Incorrect email/password combination"
+          }
+        }
+      }
+    },
+
+    "/ads/import": {
+      "post": {
+        "tags": ["Ads"],
+        "summary": "Importar anúncios",
+        "description": "Essa rota permite a importação de um arquivo CSV contendo as informações dos anúncios",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file-users": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Your file has been imported"
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/ads": {
+      "get": {
+        "tags": ["Ads"],
+        "summary": "Busca todos os anúncios da plataforma",
+        "description": "Essa rota permite buscar todos os anúncios da plataforma.",
+        "parameters": [
+          {
+            "name": "ads",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelo nome, e-mail e telefone do usuário."
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pela cidade e estado do usuário."
+            }
+          },
+          {
+            "name": "car",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar por qualquer informação do carro."
+            }
+          },
+          {
+            "name": "airbag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem airbag."
+            }
+          },
+          {
+            "name": "alarm",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem alarme."
+            }
+          },
+          {
+            "name": "air_conditioning",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem ar condicionado."
+            }
+          },
+          {
+            "name": "eletric_lock",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem trava elétrica."
+            }
+          },
+          {
+            "name": "eletric_window",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem vidro elétrico."
+            }
+          },
+          {
+            "name": "stereo",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem som."
+            }
+          },
+          {
+            "name": "reverse_sensor",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem sensor de ré."
+            }
+          },
+          {
+            "name": "reverse_camera",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem câmera de ré."
+            }
+          },
+          {
+            "name": "armoured",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que são blindados."
+            }
+          },
+          {
+            "name": "hydraulic_steering",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que permite filtrar pelos carros que possuem direção hidráulica."
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que limita a quantidade de resultados por página."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      },
+                      "previous": {
+                        "type": "boolean"
+                      },
+                      "next": {
+                        "type": "boolean"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "number"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "car": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "manufacturer": {
+                                "type": "string"
+                              },
+                              "brand": {
+                                "type": "string"
+                              },
+                              "model": {
+                                "type": "string"
+                              },
+                              "year_manufacture": {
+                                "type": "string"
+                              },
+                              "year_model": {
+                                "type": "string"
+                              },
+                              "fuel": {
+                                "type": "string"
+                              },
+                              "gearbox_type": {
+                                "type": "string"
+                              },
+                              "km": {
+                                "type": "string"
+                              },
+                              "color": {
+                                "type": "string"
+                              },
+                              "carImages": [
+                                {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "car_id": {
+                                    "type": "uuid"
+                                  },
+                                  "image_url": {
+                                    "type": "string"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          }
+        }
+      }
+    },
+
+    "/ads/{id}": {
+      "get": {
+        "tags": ["Ads"],
+        "summary": "Busca um anúncio através do ID",
+        "description": "Essa rota permite buscar apenas um anúncio por vez. O ID deve estar contido no parâmetro da URL.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID do usuário que deseja buscar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      },
+                      "previous": {
+                        "type": "boolean"
+                      },
+                      "next": {
+                        "type": "boolean"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "price": {
+                            "type": "string"
+                          },
+                          "views": {
+                            "type": "number"
+                          },
+                          "interests": {
+                            "type": "number"
+                          },
+                          "created_at": {
+                            "type": "number"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "phone": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "state": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          },
+                          "car": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "manufacturer": {
+                                "type": "string"
+                              },
+                              "brand": {
+                                "type": "string"
+                              },
+                              "model": {
+                                "type": "string"
+                              },
+                              "year_manufacture": {
+                                "type": "string"
+                              },
+                              "year_model": {
+                                "type": "string"
+                              },
+                              "fuel": {
+                                "type": "string"
+                              },
+                              "gearbox_type": {
+                                "type": "string"
+                              },
+                              "km": {
+                                "type": "string"
+                              },
+                              "color": {
+                                "type": "string"
+                              },
+                              "vehicleItem": {
+                                "type": "object",
+                                "properties": {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "airbag": {
+                                    "type": "boolean"
+                                  },
+                                  "alarm": {
+                                    "type": "boolean"
+                                  },
+                                  "air_conditioning": {
+                                    "type": "boolean"
+                                  },
+                                  "eletric_lock": {
+                                    "type": "boolean"
+                                  },
+                                  "eletric_window": {
+                                    "type": "boolean"
+                                  },
+                                  "stereo": {
+                                    "type": "boolean"
+                                  },
+                                  "reverse_sensor": {
+                                    "type": "boolean"
+                                  },
+                                  "reverse_camera": {
+                                    "type": "boolean"
+                                  },
+                                  "armoured": {
+                                    "type": "boolean"
+                                  },
+                                  "hydraulic_steering": {
+                                    "type": "boolean"
+                                  }
+                                }
+                              },
+                              "carImages": [
+                                {
+                                  "id": {
+                                    "type": "uuid"
+                                  },
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "car_id": {
+                                    "type": "uuid"
+                                  },
+                                  "image_url": {
+                                    "type": "string"
+                                  }
+                                }
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "Ad entity were not found / Car entity were not found"
+          }
+        }
+      }
+    },
+
+    "/ads/{adsId}/car/{carId}/car-image": {
+      "post": {
+        "tags": ["Cars Images"],
+        "summary": "Adição de uma foto do carro ao anúncio",
+        "description": "Essa rota permite a adição de uma nova foto do carro ao anúncio",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "adsId",
+            "in": "path",
+            "description": "ID do anúncio",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "carId",
+            "in": "path",
+            "description": "ID do carro que deseja adicionar uma foto",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "format": "binary"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found / Car not found"
+          }
+        }
+      }
+    },
+
+    "/address": {
+      "post": {
+        "tags": ["Addresses"],
+        "summary": "Cadastrar endereços",
+        "description": "Essa rota permite o cadastro de um endereço",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "zip_code": "12220200",
+                  "neighborhood": "Queens",
+                  "city": "New York",
+                  "state": "NY"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+
+    "/addresses": {
+      "get": {
+        "tags": ["Addresses"],
+        "summary": "Busca todos os endereços da plataforma",
+        "description": "Essa rota permite buscar todos os endereços da plataforma.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que determina o index pelo qual se deve iniciar a consulta."
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Parâmetro que limita a quantidade de resultados por página."
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      },
+                      "results": [
+                        {
+                          "id": {
+                            "type": "uuid"
+                          },
+                          "city": {
+                            "type": "string"
+                          },
+                          "state": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "timestamp with time zone"
+                          },
+                          "user": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "uuid"
+                              },
+                              "name": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          }
+        }
+      }
+    },
+
+    "/address/{addressId}": {
+      "get": {
+        "tags": ["Addresses"],
+        "summary": "Visualização do endereço do usuário",
+        "description": "Essa rota permite visualizar o endereço do usuário logado.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja visualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "uuid"
+                      },
+                      "zip_code": {
+                        "type": "string"
+                      },
+                      "neighborhood": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "user_id": {
+                        "type": "uuid"
+                      },
+                      "created_at": {
+                        "type": "timestamp with time zone"
+                      },
+                      "updated_at": {
+                        "type": "timestamp with time zone"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      },
+
+      "put": {
+        "tags": ["Addresses"],
+        "summary": "Atualizar endereços",
+        "description": "Essa rota permite a atualização de um endereço",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja atualizar",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "zip_code": {
+                    "type": "string"
+                  },
+                  "neighborhood": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "zip_code": "12220200",
+                  "neighborhood": "Queens",
+                  "city": "New York",
+                  "state": "NY"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "401": {
+            "description": "Zip code formatting is wrong"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["Addresses"],
+        "summary": "Exclusão do endereço do usuário",
+        "description": "Essa rota permite excluir o endereço do usuário logado.",
+        "security": [
+          { "bearerAuth": [] }
+        ],
+        "parameters": [
+          {
+            "name": "addressId",
+            "in": "path",
+            "description": "ID do endereço que deseja excluir",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The address has been successfully removed"
+          },
+          "401": {
+            "description": "JWT token is missing / Invalid JWT token"
+          },
+          "404": {
+            "description": "User not found / Address not found"
+          }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "users": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "nickname",
+        "password",
+        "email",
+        "document",
+        "is_legal"
+      ],
+      "properties": {
+        "id": {
+          "type": "uuid"
+        },
+        "name": {
+          "type": "string"
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "document": {
+          "type": "string"
+        },
+        "cnpj": {
+          "type": "string"
+        },
+        "is_legal": {
+          "type": "boolean",
+          "default": false
+        },
+        "created_at": {
+          "type": "timestamp with time zone"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone"
+        }
+      }
+    },
+
+    "user_tokens": {
+      "type": "object",
+      "required": [
+        "id",
+        "user_id",
+        "token"
+      ],
+      "properties": {
+        "id": {
+          "type": "uuid"
+        },
+        "user_id": {
+          "type": "uuid (FK)"
+        },
+        "token": {
+          "type": "uuid"
+        },
+        "created_at": {
+          "type": "timestamp with time zone"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone"
+        }
+      }
+    },
+
+    "addresses": {
+      "type": "object",
+      "required": [
+        "id",
+        "zip_code",
+        "user_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "uuid"
+        },
+        "zip_code": {
+          "type": "string"
+        },
+        "neighborhood": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "user_id": {
+          "type": "uuid (FK)"
+        },
+        "created_at": {
+          "type": "timestamp with time zone"
+        },
+        "updated_at": {
+          "type": "timestamp with time zone"
+        }
+      }
+    }
+  },
+
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

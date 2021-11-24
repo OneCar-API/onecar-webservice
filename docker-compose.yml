@@ -15,8 +15,6 @@ services:
       - pgdata:/data/postgres
 
 
-
-
   app:
     build: .
     container_name: onecar
@@ -29,8 +27,6 @@ services:
       - database_onecar
     depends_on:
       - database_onecar
-
-
 
 volumes:
   pgdata:
