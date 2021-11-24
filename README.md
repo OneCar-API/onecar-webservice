@@ -1,71 +1,83 @@
 # OneCar Webservice
 
+![Sem título-1_Prancheta 1](https://user-images.githubusercontent.com/56441318/133950991-44ac40d3-c041-4c7a-b35b-bbf84abc9c37.png)
+
 Este repositório é destinado à API do produto OneCar, seu site de vendas de carros.
 
 ## Iniciando as instalações
 
-- Para executar o projeto será necessário a instalação do NodeJS e Docker.
+- Para executar o projeto será necessário a instalação do Docker.
 
-### Instalação do NodeJS Linux
+### Instalação do Docker Ubuntu/Debian
 
-- Execute os comandos abaixo no terminal:
-
-**Ubuntu**
-
-```
-curl -fsSL https://deb.nodesource.com/setup_14.x | sudo -E bash -
-sudo apt-get install -y nodejs
-```
-
-**Debian, as root**
-
-```
-curl -fsSL https://deb.nodesource.com/setup_14.x | bash -
-apt-get install -y nodejs
-```
-
-### Instalação do NodeJS Windows
-
-- Acesse o site do [NodeJS](https://nodejs.org/en/) e baixe a versão LTS:
-
-### Instalação do Docker
-
-- Para instalar o Docker Engine, acesse o site do [Docker](https://docs.docker.com/engine/install) e escolha a distribuição da sua preferência.
-- Siga todos os passos listados.
-- Por fim, para que não precise utilizar o sudo, execute os comandos presentes [nessa página](https://docs.docker.com/engine/install/linux-postinstall).
-
-
-### Container Docker
-
-- Agora deve-se criar um container com a imagem do PostgreSQL, executando:
+No Linux, vamos instalar o Docker utilizando o `apt`, para isso, em seu terminal, execute os comandos abaixo:
 
 ```bash
-# No lugar de your-password adicione a senha que desejar
-
-docker run --name postgres -e POSTGRES_PASSWORD=your-password -e POSTGRES_DB=onecar -p 5432:5432 -d postgres
+sudo apt update
+sudo apt remove docker docker-engine docker.io
+sudo apt install docker.io
 ```
 
-- Seu container foi criado com o USER padrão postgres, caso deseje atribuir um nome ao seu usuário, você pode adicionar o atributo
-```-e POSTGRES_USER=my-user```
-
-- Neste momento seu container deve estar executando. Para confirmar execute:
+Agora com o Docker instalado, vamos habilitar para que seu serviço seja iniciado automaticamente com o sistema:
 
 ```bash
-docker ps
+sudo systemctl start docker
+sudo systemctl enable docker
 ```
 
-- Caso não tenha iniciado, execute:
+Para garantir que o Docker foi instalado da forma correta, execute no terminal:
 
 ```bash
-docker start postgres
+docker version
 ```
 
-- E para parar o container, execute:
+Você precisará executar todos comandos do Docker utilizando o `sudo`, mas caso queira executa-los sem o `sudo`, utilize [esse guia](https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user).
+
+### Windows (64 Bit)
+
+O Docker no Windows possui alguns requisitos: 
+
+- Microsoft Windows 10 Professional  ou Enterprise 64-bit
+- Caso você possua o Windows 10 Home 64-bit também é possível usar o Docker mas será necessário instalar o WSL2 também (o instalador já se encarrega disso para você)
+
+Caso você possua o Windows 32-bit, não será possível realizar a instalação do Docker.
+
+Caso tenha todos requisitos, então faça a instalação do Docker para Windows:
+
+[Docker Desktop for Mac and Windows | Docker](https://www.docker.com/products/docker-desktop)
+
+Depois de instalar o Docker e abrir o software você já está pronto para continuar. Lembrando que essa versão do Docker para Windows tem uma interface visual muito bacana, ou seja, você pode usar a interface para visualizar os serviços sendo executados, logs, imagens e muito mais.
+
+Para verificar que o Docker foi instalado corretamente, em **uma nova janela** do terminal execute:
 
 ```bash
-docker stop postgres
+docker version
+```
+## Instalação do Docker Compose
+
+O Docker Compose precisará ser instalado apenas no Linux, já que nos demais sistemas ele já vem instalado junto com o Docker.
+
+### Linux (Ubuntu/Debian)
+
+- Rode o seguinte comando para instalar o Docker Compose:
+
+```bash
+sudo curl -L "https://github.com/docker/compose/releases/download/1.28.5/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 ```
 
+- Aplique as permissões necessárias ao binário:
+
+```bash
+sudo chmod +x /usr/local/bin/docker-compose
+```
+
+Após isso, rode o comando `docker-compose --version` para assegurar que a instalação foi um sucesso. Caso retorne algum erro (mesmo reiniciando o terminal), crie um link simbólico para `usr/bin` com o seguinte comando:
+
+```bash
+sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+```
+
+Por fim, teste novamente com o comando `docker-compose --version` para checar se está tudo funcionando.
 
 ### Iniciando a aplicação
 
@@ -73,9 +85,9 @@ docker stop postgres
 - Agora os arquivos com variáveis ambiente (*.env*) e de conexão com o banco de dados (*ormconfig.json*) devem ser criados na raiz do projeto.
 - Você pode executar os seguintes comandos para copiar os arquivos de exemplo com as informações necessárias para configuração.
 ```
-$ cp ormconfig.example.json ormconfig.json
+cp ormconfig.example.json ormconfig.json
 
-$ cp .env.example .env
+cp .env.example .env
 ```
 
 - Ou pode criá-los manualmente pela interface gráfica e adicionar o seguinte conteúdo em cada um deles:
@@ -96,8 +108,8 @@ APP_API_URL=http://localhost:3333
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
-  "username": "postgres",
-  "password": "your-password",
+  "username": "root",
+  "password": "admin123",
   "database": "onecar",
   "entities": [
     "./src/models/*.ts"
@@ -112,9 +124,13 @@ APP_API_URL=http://localhost:3333
 
 ```
 
-- Lembrando que se você adicionou o atributo ```-e POSTGRES_USER=my-user``` ao criar seu container Docker, você precisa trocar o *username* de **postgres** para **my-user**, por exemplo.
+- Agora vamos subir o container do Docker utilizando o comando ```docker-compose up -d```, isso fará a instalação do NodeJS e a conexão com o banco de dados.
 
-- Feito isso, as migrations precisarão ser executadas para que as tabelas sejam criadas no banco de dados. Para isso, utilize o comando abaixo:
+- Neste momento o servidor foi iniciado e você pode visualizar os logs da aplicação com o comando ```docker logs onecar -f```.
+
+- A mensagem **Server started on port 3333** mostra que o servidor foi iniciado.
+
+- Por fim, as migrations precisarão ser executadas para que as tabelas sejam criadas no banco de dados. Para isso, utilize o comando abaixo:
 
 ```bash
 yarn typeorm migration:run
@@ -125,13 +141,3 @@ npm typeorm migration:run
 ```
 
 
-- Neste momento o servidor pode ser iniciado com o comando:
-```bash
-yarn dev
-
-# ou
-
-npm run dev
-```
-
-- A mensagem **Server started on port 3333** mostra que o servidor foi iniciado.
