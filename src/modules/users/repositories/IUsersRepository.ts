@@ -54,4 +54,5 @@ export default interface IUsersRepository {
   showUser(
     user_id: string,
   ): Promise<User | undefined>;
+  delete(id: string): Promise<void>;
 }

@@ -58,4 +58,15 @@ usersRouter.get(
   usersController.show,
 );
 
+usersRouter.delete(
+  '/user/:id',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  usersController.delete,
+);
+
 export default usersRouter;
