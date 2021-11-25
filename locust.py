@@ -6,15 +6,15 @@ class WebsiteUser(HttpUser):
 
 
   @task
-  def index_page(self):
+  def create_ads(self):
     self.client.post(url='/ads')
 
   @task
-  def index_page(self):
+  def import_ads(self):
     self.client.post(url='/ads/import')
 
   @task
-  def index_page(self):
+  def list_ads(self):
     self.client.get(url='/ads')
 
 
