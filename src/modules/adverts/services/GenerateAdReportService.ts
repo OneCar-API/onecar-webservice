@@ -9,6 +9,7 @@ import IHashProvider from '../providers/HashProvider/models/IHashProvider';
 import User from '../infra/typeorm/entities/User';
 import IUsersTokensRepository from '../repositories/IUsersTokensRepository';
 import IMailProvider from '@shared/container/providers/MailProvider/models/IMailProvider';
+import IAdsRepository from '../repositories/IAdsRepository';
 
 interface IRequest {
   name: string;
@@ -22,10 +23,13 @@ interface IRequest {
 
 
 @injectable()
-class CreateUserService {
+class GenerateAdReportService {
   constructor(
     @inject('UsersRepository')
     private usersRepository: IUsersRepository,
+
+    @inject('AdsRepository')
+    private adsRepository: IAdsRepository,
 
     @inject('UsersTokensRepository')
     private usersTokensRepository: IUsersTokensRepository,
@@ -56,12 +60,6 @@ class CreateUserService {
 
     if (checkNicknameExists) {
       throw new AppError('Nickname already in use.', 401);
-    }
-
-    const checkDocumentAlreadyInUse = await this.usersRepository.findByDocument(document);
-
-    if (checkDocumentAlreadyInUse) {
-      throw new AppError('Document already in use.', 401);
     }
 
     const hashedPassword = await this.hashProvider.generateHash(password);
@@ -102,32 +100,8 @@ class CreateUserService {
       is_active: false,
     });
 
-    const { token } = await this.usersTokensRepository.generate(user.id);
-
-      const confirmUser = path.resolve(
-        __dirname,
-        '..',
-        'views',
-        'confirm_user.hbs',
-      );
-
-      await this.mailProvider.sendMail({
-        to: {
-          name: user.name,
-          email: user.email,
-        },
-        subject: '[OneCar] Confirmação de Cadastro',
-        templateData: {
-          file: confirmUser,
-          variables: {
-            name: user.name,
-            link: `${process.env.APP_WEB_URL}/confirm-user?token=${token}`,
-          },
-        },
-      });
-
     return user;
   }
 }
 
-export default CreateUserService;
+export default GenerateAdReportService;
