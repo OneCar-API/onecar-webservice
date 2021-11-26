@@ -72,7 +72,6 @@ adsRouter.put(
       color: Joi.string().empty(''),
     },
   }),
-  ensureAuthenticated,
   adsController.updateAd)
 
 adsRouter.put(
