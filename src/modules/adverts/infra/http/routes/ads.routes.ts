@@ -41,14 +41,12 @@ adsRouter.post(
       km: Joi.number(),
     },
   }),
-  ensureAuthenticated,
   adsController.create,
 );
 
 adsRouter.post(
   '/import',
   upload.single('file-ads'),
-  ensureAuthenticated,
   adsController.import,
 );
 
