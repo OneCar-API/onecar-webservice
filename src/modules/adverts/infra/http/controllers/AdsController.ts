@@ -14,6 +14,7 @@ import ListAdsByUserService from '@modules/adverts/services/ListAdsByUserService
 
 import AppError from '@shared/errors/AppError';
 import UploadCarImagesService from '@modules/adverts/services/UploadCarImagesService';
+import GenerateAdReportService from '@modules/adverts/services/GenerateAdReportService';
 
 export default class AdsController {
   public async create(request: Request, response: Response): Promise<Response> {
@@ -185,5 +186,22 @@ export default class AdsController {
     return response
       .status(200)
       .json(serviceResponse);
+  }
+
+  public async report(request: Request, response: Response): Promise<Response> {
+    const user_id = request.user.id;
+
+    const ad_id = request.params.id;
+
+    console.log(ad_id)
+
+    const createReport = container.resolve(GenerateAdReportService);
+
+    const report = await createReport.execute({
+      user_id,
+      ad_id,
+    });
+
+    return response.json(report);
   }
 }

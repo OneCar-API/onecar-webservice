@@ -75,7 +75,8 @@ adsRouter.put(
     },
   }),
   ensureAuthenticated,
-  adsController.updateAd)
+  adsController.updateAd
+);
 
 adsRouter.put(
   '/vehicle-items/:id',
@@ -132,5 +133,16 @@ adsRouter.get(
   ensureAuthenticated,
   adsController.listByUser
 )
+
+adsRouter.get(
+  '/:id/report',
+  celebrate({
+    [Segments.PARAMS]: {
+      id: Joi.string().uuid().required(),
+    },
+  }),
+  ensureAuthenticated,
+  adsController.report
+);
 
 export default adsRouter;

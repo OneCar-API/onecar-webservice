@@ -35,7 +35,7 @@ class Ad {
   views: number;
 
   @Column({nullable: true})
-  interests: Number;
+  interests: number;
 
   @ManyToOne(() => User, user => user.ads)
   @JoinColumn({ name: 'user_id'})
