@@ -41,14 +41,12 @@ adsRouter.post(
       km: Joi.number(),
     },
   }),
-  ensureAuthenticated,
   adsController.create,
 );
 
 adsRouter.post(
   '/import',
   upload.single('file-ads'),
-  ensureAuthenticated,
   adsController.import,
 );
 
@@ -74,9 +72,8 @@ adsRouter.put(
       color: Joi.string().empty(''),
     },
   }),
-  ensureAuthenticated,
-  adsController.updateAd
-);
+  adsController.updateAd)
+
 
 adsRouter.put(
   '/vehicle-items/:id',
