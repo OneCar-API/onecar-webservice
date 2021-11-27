@@ -41,6 +41,7 @@ adsRouter.post(
       km: Joi.number(),
     },
   }),
+  ensureAuthenticated,
   adsController.create,
 );
 
@@ -75,7 +76,7 @@ adsRouter.put(
   adsController.updateAd)
 
 
-adsRouter.put(
+adsRouter.post(
   '/vehicle-items/:id',
   ensureAuthenticated,
   adsController.updateVehicleItems)
