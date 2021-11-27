@@ -58,6 +58,12 @@ class CreateUserService {
       throw new AppError('Nickname already in use.', 401);
     }
 
+    const checkDocumentAlreadyInUse = await this.usersRepository.findByDocument(document);
+
+    if (checkDocumentAlreadyInUse) {
+      throw new AppError('Document already in use.', 401);
+    }
+
     const hashedPassword = await this.hashProvider.generateHash(password);
 
     if (phone) {

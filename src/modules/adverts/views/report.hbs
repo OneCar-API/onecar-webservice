@@ -1,0 +1,69 @@
+<style>
+  .container_email img {
+    width: 350px;
+    padding: 20px;
+  }
+  .container_email {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .text_email {
+    width: 600px;
+    padding-top: 15px;
+  }
+  .text_email h1 {
+    color: #5E9DBC;
+  }
+  .text_email h2 {
+    color: #555555;
+  }
+  .text_email h3 {
+    color: #5E9DBC;
+    font-size: 30px;
+  }
+  .text_email p {
+    color: #555555;
+    font-size: 20px;
+  }
+  .footer_email {
+    margin-top: 70px;
+    color: #555555;
+  }
+  .footer_email p {
+    color: #555555;
+    font-size: 14px;
+  }
+  .footer_email h4 {
+    color: #5E9DBC;
+    font-size: 16px;
+  }
+</style>
+
+<div class="container_email">
+  <div class="text_email">
+    <h1>Olá, {{name}}!</h1>
+    <br/>
+    <h2>Este é seu relatório semanal!!</h2>
+    <br />
+    <p>
+      Seu anúncio está em nossa plataforma há <h3>{{time}} dias.</h3>
+    </p>
+    <br />
+
+    <p>
+      Nesses dias, obteve a média diária de <h3>{{views}} visualizações.</h3>
+    </p>
+    <br />
+
+    <p>
+      Além disso, diariamente, seu anúncio alcançou um total de <h3>{{interests}} interesses.</h3>
+    </p>
+
+  </div>
+  <div class="footer_email">
+    <p>Até a próxima!</p>
+    <h4>Equipe OneCar</h4>
+  </div>
+</div>

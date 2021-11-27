@@ -14,7 +14,7 @@ export default {
 
   defaults: {
     from: {
-      email: 'no-reply@onecar.com.br',
+      email: 'noreply.onecar@groupkr.com',
       name: 'Equipe OneCar',
     },
   },
