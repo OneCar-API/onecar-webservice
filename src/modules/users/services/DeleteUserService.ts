@@ -1,7 +1,9 @@
-import { injectable, inject } from 'tsyringe';
+import { container, injectable, inject} from 'tsyringe';
 
 import AppError from '@shared/errors/AppError';
 import IUsersRepository from '../repositories/IUsersRepository';
+import DeleteAdService from '../../adverts/services/DeleteAdService';
+import ListAdsByUserService from '../../adverts/services/ListAdsByUserService';
 
 interface IRequest {
   user_id: string;
@@ -26,6 +28,18 @@ class DeleteUserService {
     }
 
     await this.usersRepository.delete(user.id);
+
+    const listAdsByUserService = container.resolve(ListAdsByUserService);
+
+    const userAds = await listAdsByUserService.execute(user.id);
+
+    const deleteAdService = container.resolve(DeleteAdService);
+
+    for (const ad of userAds) {
+      deleteAdService.execute(ad.id, user.id);
+    }
+
+
   }
 }
 
