@@ -23,8 +23,12 @@ class ShowAdService {
   public async execute(ad_id: string): Promise<Ad | undefined> {
     const ad = await this.adsRepository.showAd(ad_id);
 
-    if(!ad) {
+    if (!ad) {
       throw new AppError('Ad entity were not found', 404);
+    }
+
+    if (ad.paused) {
+      throw new AppError('Ad not found', 404);
     }
 
     if (ad.views == null) {

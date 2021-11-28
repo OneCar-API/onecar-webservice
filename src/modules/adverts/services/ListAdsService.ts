@@ -52,11 +52,17 @@ class ListAdsService {
       filters,
     );
 
+    function isUnpaused(ad: Ad) {
+      return !ad.paused;
+    }
+
+    var unpausedAds = ads.filter(isUnpaused);
+
     const responseFormatted = {
       total: totalAds,
       previous,
       next,
-      results: ads,
+      results: unpausedAds,
     };
 
     return responseFormatted;

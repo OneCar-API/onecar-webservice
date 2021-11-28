@@ -28,8 +28,12 @@ class DeleteAdService {
 
     const ad = await this.adsRepository.findById(id);
 
-    if(!ad) {
+    if (!ad) {
       throw new AppError('Ad entity were not found');
+    }
+
+    if (ad.paused) {
+      throw new AppError('Ad not found', 404);
     }
 
     if (ad.user_id != user_id) {

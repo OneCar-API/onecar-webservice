@@ -51,6 +51,8 @@ class Ad {
   @Column()
   car_id: string;
 
+  @Column({nullable: true})
+  paused: boolean;
 
   @CreateDateColumn()
   created_at: Date;

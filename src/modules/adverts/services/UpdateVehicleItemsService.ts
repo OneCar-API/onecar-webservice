@@ -40,19 +40,23 @@ class UpdateVehicleItemsService {
     }
     const ad = await this.adsRepository.findById(ad_id);
 
-    if(!ad) {
-      throw new AppError('Ad not found');
+    if (!ad) {
+      throw new AppError('Ad not found', 404);
+    }
+
+    if (ad.paused) {
+      throw new AppError('Ad not found', 404);
     }
 
     const car = await this.carsRepository.findById(ad.car_id);
 
-    if(!car) {
+    if (!car) {
       throw new AppError("ID for Car in Ad entity couldn't find any match")
     }
 
     const items = await this.vehicleItemsRepository.findById(car.vehicle_item_id);
 
-    if(!items) {
+    if (!items) {
       throw new AppError("ID for Vehicle Item in Car entity couldn't find any match")
     }
 
