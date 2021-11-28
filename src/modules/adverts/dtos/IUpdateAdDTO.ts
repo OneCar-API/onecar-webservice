@@ -13,4 +13,5 @@ export default interface IUpdateAdDTO {
   color?: string;
   vehicle_price?: Number;
   doors?: Number;
+  paused?: boolean;
 }

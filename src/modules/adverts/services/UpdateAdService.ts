@@ -37,6 +37,7 @@ class UpdateAdService {
     color,
     doors,
     vehicle_price,
+    paused
   }: UpdateAdDTO, userId: string): Promise<Ad> {
     const ad = await this.adsRepository.findById(ad_id);
 
@@ -57,6 +58,7 @@ class UpdateAdService {
     ad.price = vehicle_price ? Number(vehicle_price) : new Number();
     ad.title = title ? title : "";
     ad.description = description ? description : "";
+    ad.paused = paused ? paused : false;
 
     car.manufacturer = manufacturer ? manufacturer : "";
     car.brand = brand ? brand : "";
