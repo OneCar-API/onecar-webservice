@@ -48,6 +48,7 @@ adsRouter.post(
 adsRouter.post(
   '/import',
   upload.single('file-ads'),
+  ensureAuthenticated,
   adsController.import,
 );
 
