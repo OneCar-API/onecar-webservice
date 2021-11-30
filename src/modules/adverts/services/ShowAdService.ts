@@ -6,6 +6,7 @@ import ICarsRepository from '../repositories/ICarsRepository';
 import IAdsRepository from '../repositories/IAdsRepository';
 import IVehicleItemsRepository from '../repositories/IVehicleItemsRepository';
 import Ad from '../../adverts/infra/typeorm/entities/Ad';
+import { request } from 'express';
 
 @injectable()
 class ShowAdService {
@@ -25,10 +26,6 @@ class ShowAdService {
 
     if (!ad) {
       throw new AppError('Ad entity were not found', 404);
-    }
-
-    if (ad.paused) {
-      throw new AppError('Ad not found', 404);
     }
 
     if (ad.views == null) {

@@ -53,15 +53,13 @@ class ListAdsService {
       filters,
     );
 
-    var unpausedAds = ads.filter(ad => !ad.paused);
 
-    console.log(ads);
 
     const responseFormatted = {
       total: totalAds,
       previous,
       next,
-      results: unpausedAds,
+      results: ads,
     };
 
     return responseFormatted;
