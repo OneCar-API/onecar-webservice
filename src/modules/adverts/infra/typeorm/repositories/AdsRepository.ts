@@ -112,6 +112,7 @@ class AdsRepository implements IAdsRepository {
       .select([
         'ad.id',
         'ad.price',
+        'ad.paused',
         'ad.created_at',
         'car.id',
         'car.manufacturer',
@@ -312,6 +313,7 @@ class AdsRepository implements IAdsRepository {
         'ad.price',
         'ad.interests',
         'ad.views',
+        'ad.paused',
         'ad.created_at',
         'car.id',
         'car.manufacturer',

@@ -12,6 +12,7 @@ interface IRequest {
     address?: string;
     airbag?: boolean;
     alarm?: boolean;
+    paused?: boolean;
     air_conditioning?: boolean;
     eletric_lock?: boolean;
     eletric_window?: boolean;
@@ -52,11 +53,9 @@ class ListAdsService {
       filters,
     );
 
-    function isUnpaused(ad: Ad) {
-      return !ad.paused;
-    }
+    var unpausedAds = ads.filter(ad => !ad.paused);
 
-    var unpausedAds = ads.filter(isUnpaused);
+    console.log(ads);
 
     const responseFormatted = {
       total: totalAds,

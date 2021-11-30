@@ -53,6 +53,7 @@ export default class AdsController {
       address,
       airbag,
       alarm,
+      paused,
       air_conditioning,
       eletric_lock,
       eletric_window,
@@ -76,6 +77,7 @@ export default class AdsController {
         address: address as string,
         airbag: Boolean(airbag),
         alarm: Boolean(alarm),
+        paused: Boolean(paused),
         air_conditioning: Boolean(air_conditioning),
         eletric_lock: Boolean(eletric_lock),
         eletric_window: Boolean(eletric_window),
@@ -192,8 +194,6 @@ export default class AdsController {
     const user_id = request.user.id;
 
     const ad_id = request.params.id;
-
-    console.log(ad_id)
 
     const createReport = container.resolve(GenerateAdReportService);
 

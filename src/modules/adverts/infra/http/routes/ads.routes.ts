@@ -75,6 +75,7 @@ adsRouter.put(
       paused: Joi.boolean(),
     },
   }),
+  ensureAuthenticated,
   adsController.updateAd)
 
 
