@@ -72,6 +72,7 @@ adsRouter.put(
       doors: Joi.number(),
       km: Joi.number(),
       color: Joi.string().empty(''),
+      paused: Joi.boolean(),
     },
   }),
   adsController.updateAd)
