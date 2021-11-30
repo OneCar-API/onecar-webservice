@@ -44,10 +44,6 @@ class UpdateVehicleItemsService {
       throw new AppError('Ad not found', 404);
     }
 
-    if (ad.paused) {
-      throw new AppError('Ad not found', 404);
-    }
-
     const car = await this.carsRepository.findById(ad.car_id);
 
     if (!car) {

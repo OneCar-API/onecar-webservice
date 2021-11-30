@@ -32,10 +32,6 @@ class DeleteAdService {
       throw new AppError('Ad entity were not found');
     }
 
-    if (ad.paused) {
-      throw new AppError('Ad not found', 404);
-    }
-
     if (ad.user_id != user_id) {
       throw new AppError('Permission Denied. Only the Ad owner is allowed to delete an Ad');
     }
