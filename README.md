@@ -35,7 +35,7 @@ Você precisará executar todos comandos do Docker utilizando o `sudo`, mas caso
 
 ### Windows (64 Bit)
 
-O Docker no Windows possui alguns requisitos: 
+O Docker no Windows possui alguns requisitos:
 
 - Microsoft Windows 10 Professional  ou Enterprise 64-bit
 - Caso você possua o Windows 10 Home 64-bit também é possível usar o Docker mas será necessário instalar o WSL2 também (o instalador já se encarrega disso para você)
@@ -139,5 +139,10 @@ yarn typeorm migration:run
 
 npm typeorm migration:run
 ```
+
+
+## Teste CI
+
+- Alteração para demonstração do CI.
 
 
